@@ -1,86 +1,173 @@
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--<title>Veteriner Uygulaması</title>-->
+<!--<meta charset="UTF-8" />-->
+<!--<meta name="viewport" content="width=device-width, initial-scale=1" />-->
+<!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+<!--</head>-->
+<!--<body>-->
+<!--	<div class="container">-->
+<!--		<div class="row">-->
+<!--			<div lang="tr" th:replace="fragments/header :: header"></div> -->
+<!--			<div lang="tr" th:replace="fragments/header :: title"></div>-->
+<!--			<div class="col-md-12"></div>-->
+<!--			<div class="col-md-4">-->
+<!--				<a class="btn btn-success" href="/customer/customers">Müşterileri Görüntüle</a>-->
+<!--				<hr>-->
+<!--				<div class="card" style="width: 18rem;">-->
+<!--					<div class="card-header">-->
+<!--					Featured-->
+<!--					</div>-->
+<!--					<ul class="list-group list-group-flush">-->
+<!--						<li class="list-group-item" th:text="${customer.getFirstname()}"></li>-->
+<!--						<li class="list-group-item" th:text="${customer.getLastname()}"></li>-->
+<!--						<li class="list-group-item" th:text="${customer.getPhone_number()}"></li>-->
+<!--						<li class="list-group-item" th:text="${customer.getCity()}"></li>-->
+<!--						<li class="list-group-item" th:text="${customer.getEmail()}"></li>-->
+<!--					</ul>	-->
+<!--					<div class="card-body">-->
+<!--						<a th:href="@{'/customer/show-customer/' + ${customer.getCustomerid()}}" class="btn btn-info btn-sm">Profili Görüntüle</a>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
+<!--			<div class="col-md-8" style="border:3px solid #ddd; padding: 5px 5px;" >-->
+<!--				<div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${message}">-->
+<!--					<strong th:text="${message}"></strong> -->
+<!--					<button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
+<!--					<span aria-hidden="true">&times;</span>-->
+<!--					</button>-->
+<!--				</div>-->
+<!--				<a class="btn btn-warning" th:href="@{'/pet/show-pets/' + ${customer.getCustomerid()}}">Hayvanları Görüntüle</a>-->
+<!--				<a class="btn btn-warning" th:href="@{'/pet/insert-pet/' + ${customer.getCustomerid()}}">Hayvan Ekle</a>-->
+<!--   				<hr>-->
+<!--				<form th:action="@{'/pet/show-pets-by-name/'+${customer.getCustomerid()}}" th:object="${customer}" method="get">-->
+<!--					<div class="form-group row">-->
+<!--						<label for="searchCustomer" class="col-sm-4 col-form-label">Hayvan ismi giriniz</label>-->
+<!--						<div class="col-sm-4">-->
+<!--							<input type="text" name="name" class="form-control" id="searchCustomer" placeholder="İsim giriniz.">-->
+<!--						</div>-->
+<!--						<div class="col-sm-4">-->
+<!--							<button type="submit" class="btn btn-primary mb-2">Bul</button>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</form>-->
+<!--				<h3><span class="badge badge-info" >Kayıtlı Hayvanların Listesi</span></h3>-->
+<!--			    <hr>	-->
+<!--				<table class="table table-striped table-sm">-->
+<!--					<thead>-->
+<!--						<tr>-->
+<!--							<th scope="col">Tipi</th>-->
+<!--							<th scope="col">ismi</th>-->
+<!--							<th scope="col">Yaşı</th>-->
+<!--							<th scope="col">Sağlık Problemi</th>-->
+<!--							<th scope="col">İşlemler</th>-->
+<!--						</tr>-->
+<!--					</thead>-->
+<!--					<tbody>-->
+<!--						<tr th:each="singlePet : ${pets}">-->
+<!--							<td th:text="${singlePet.getType()}"></td>-->
+<!--							<td th:text="${singlePet.getName()}"></td>-->
+<!--							<td th:text="${singlePet.getAge()}"></td>-->
+<!--							<td th:text="${singlePet.getProblem()}"></td>-->
+<!--							<td>-->
+<!--								<a th:href="@{'/pet/delete-pet/' + ${singlePet.getId()}}" class="btn btn-warning btn-sm" -->
+<!--									onclick="return confirm('Are you sure you want to delete this item?');" >Sil</a>-->
+<!--							</td>-->
+<!--						</tr>-->
+<!--					</tbody>-->
+<!--				</table>-->
+<!--			    <hr>	-->
+<!--			</div>-->
+<!--		</div>-->
+<!--	</div>-->
+<!--	-->
+<!--	<div lang="tr" th:replace="fragments/header :: jsfile"></div>-->
+<!--	</body>-->
+<!--</html>-->
+
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Veteriner Uygulaması</title>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<title>Veterinary Application</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-	<div class="container">
-		<div class="row">
-			<div lang="tr" th:replace="fragments/header :: header"></div> 
-			<div lang="tr" th:replace="fragments/header :: title"></div>
-			<div class="col-md-12"></div>
-			<div class="col-md-4">
-				<a class="btn btn-success" href="/customer/customers">Müşterileri Görüntüle</a>
-				<hr>
-				<div class="card" style="width: 18rem;">
-					<div class="card-header">
+<div class="container">
+	<div class="row">
+		<div lang="en" th:replace="fragments/header :: header"></div>
+		<div lang="en" th:replace="fragments/header :: title"></div>
+		<div class="col-md-12"></div>
+		<div class="col-md-4">
+			<a class="btn btn-success" href="/customer/customers">View Customers</a>
+			<hr>
+			<div class="card" style="width: 18rem;">
+				<div class="card-header">
 					Featured
-					</div>
-					<ul class="list-group list-group-flush">
-						<li class="list-group-item" th:text="${customer.getFirstname()}"></li>
-						<li class="list-group-item" th:text="${customer.getLastname()}"></li>
-						<li class="list-group-item" th:text="${customer.getPhone_number()}"></li>
-						<li class="list-group-item" th:text="${customer.getCity()}"></li>
-						<li class="list-group-item" th:text="${customer.getEmail()}"></li>
-					</ul>	
-					<div class="card-body">
-						<a th:href="@{'/customer/show-customer/' + ${customer.getCustomerid()}}" class="btn btn-info btn-sm">Profili Görüntüle</a>
-					</div>
 				</div>
-			</div>
-			<div class="col-md-8" style="border:3px solid #ddd; padding: 5px 5px;" >
-				<div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${message}">
-					<strong th:text="${message}"></strong> 
-					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-					</button>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item" th:text="${customer.getFirstname()}"></li>
+					<li class="list-group-item" th:text="${customer.getLastname()}"></li>
+					<li class="list-group-item" th:text="${customer.getPhone_number()}"></li>
+					<li class="list-group-item" th:text="${customer.getCity()}"></li>
+					<li class="list-group-item" th:text="${customer.getEmail()}"></li>
+				</ul>
+				<div class="card-body">
+					<a th:href="@{'/customer/show-customer/' + ${customer.getCustomerid()}}" class="btn btn-info btn-sm">View Profile</a>
 				</div>
-				<a class="btn btn-warning" th:href="@{'/pet/show-pets/' + ${customer.getCustomerid()}}">Hayvanları Görüntüle</a>
-				<a class="btn btn-warning" th:href="@{'/pet/insert-pet/' + ${customer.getCustomerid()}}">Hayvan Ekle</a>
-   				<hr>
-				<form th:action="@{'/pet/show-pets-by-name/'+${customer.getCustomerid()}}" th:object="${customer}" method="get">
-					<div class="form-group row">
-						<label for="searchCustomer" class="col-sm-4 col-form-label">Hayvan ismi giriniz</label>
-						<div class="col-sm-4">
-							<input type="text" name="name" class="form-control" id="searchCustomer" placeholder="İsim giriniz.">
-						</div>
-						<div class="col-sm-4">
-							<button type="submit" class="btn btn-primary mb-2">Bul</button>
-						</div>
-					</div>
-				</form>
-				<h3><span class="badge badge-info" >Kayıtlı Hayvanların Listesi</span></h3>
-			    <hr>	
-				<table class="table table-striped table-sm">
-					<thead>
-						<tr>
-							<th scope="col">Tipi</th>
-							<th scope="col">ismi</th>
-							<th scope="col">Yaşı</th>
-							<th scope="col">Sağlık Problemi</th>
-							<th scope="col">İşlemler</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="singlePet : ${pets}">
-							<td th:text="${singlePet.getType()}"></td>
-							<td th:text="${singlePet.getName()}"></td>
-							<td th:text="${singlePet.getAge()}"></td>
-							<td th:text="${singlePet.getProblem()}"></td>
-							<td>
-								<a th:href="@{'/pet/delete-pet/' + ${singlePet.getId()}}" class="btn btn-warning btn-sm" 
-									onclick="return confirm('Are you sure you want to delete this item?');" >Sil</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			    <hr>	
 			</div>
 		</div>
+		<div class="col-md-8" style="border:3px solid #ddd; padding: 5px 5px;" >
+			<div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${message}">
+				<strong th:text="${message}"></strong>
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<a class="btn btn-warning" th:href="@{'/pet/show-pets/' + ${customer.getCustomerid()}}">View Pets</a>
+			<a class="btn btn-warning" th:href="@{'/pet/insert-pet/' + ${customer.getCustomerid()}}">Add Pet</a>
+			<hr>
+			<form th:action="@{'/pet/show-pets-by-name/'+${customer.getCustomerid()}}" th:object="${customer}" method="get">
+				<div class="form-group row">
+					<label for="searchCustomer" class="col-sm-4 col-form-label">Enter Pet Name</label>
+					<div class="col-sm-4">
+						<input type="text" name="name" class="form-control" id="searchCustomer" placeholder="Enter name.">
+					</div>
+					<div class="col-sm-4">
+						<button type="submit" class="btn btn-primary mb-2">Search</button>
+					</div>
+				</div>
+			</form>
+			<h3><span class="badge badge-info" >List of Registered Pets</span></h3>
+			<hr>
+			<table class="table table-striped table-sm">
+				<thead>
+				<tr>
+					<th scope="col">Type</th>
+					<th scope="col">Name</th>
+					<th scope="col">Age</th>
+					<th scope="col">Health Problem</th>
+					<th scope="col">Actions</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr th:each="singlePet : ${pets}">
+					<td th:text="${singlePet.getType()}"></td>
+					<td th:text="${singlePet.getName()}"></td>
+					<td th:text="${singlePet.getAge()}"></td>
+					<td th:text="${singlePet.getProblem()}"></td>
+					<td>
+						<a th:href="@{'/pet/delete-pet/' + ${singlePet.getId()}}" class="btn btn-warning btn-sm"
+						   onclick="return confirm('Are you sure you want to delete this item?');" >Delete</a>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<hr>
+		</div>
 	</div>
-	
-	<div lang="tr" th:replace="fragments/header :: jsfile"></div>
-	</body>
+</div>
+
+<div lang="en" th:replace="fragments/header :: jsfile"></div>
+</body>
 </html>

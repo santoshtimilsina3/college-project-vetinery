@@ -54,16 +54,16 @@ public class PetController {
 		if(customer.isPresent()) {
 			
 			List<Pet> pets = petServiceImp.findByCustomer(customer.get());
-			map.put("title", "Müşteri Ait Hayvanlar");
+			map.put("title", "Animals Belonging to the Customer");
 			map.put("customer", customer.get());
 			map.put("pet", new Pet());
 			map.put("pets", pets);
 			return "pet/pets";
 		}else {			
 			List<Customer> customers = customerServiceImp.findAll();
-			map.put("title", "Müşteriler");
+			map.put("title", "Customers");
 			map.put("customers", customers);
-			map.put("message", " Kayıt bulunamamıştır.");
+			map.put("message", " No records found.");
 			return "customer/customers";
 		}
 	}
@@ -85,21 +85,21 @@ public class PetController {
 			});
 			if(pets.size()>0) {
 				map.put("pets", pets);
-				map.put("message","Kayıtlar bulunmuştur");
+				map.put("message","Records have been found.");
 			}
 			else {
-				map.put("message", name+" isme ait bir hayvan bulunamamıştır.");
+				map.put("message", name+" No animal found under the name.");
 				pets2 = petServiceImp.findByCustomer(customer.get());
 				map.put("pets", pets2);
 			}
-			map.put("title", "Müşteri Ait Hayvanlar");
+			map.put("title", "Animals Belonging to the Customer");
 			map.put("customer", customer.get());
 			return "pet/pets";
 		}else {
 			List<Customer> customers = customerServiceImp.findAll();
-			map.put("title", "Müşteriler");
+			map.put("title", "Customers");
 			map.put("customers", customers);
-			map.put("message", "Bu isimde bir kayıt yoktur. id : " + customerid);
+			map.put("message", "There is no record with this name. id : " + customerid);
 			return "customer/customers";
 		}
 		
@@ -115,7 +115,7 @@ public class PetController {
 		Optional<Customer> customer = customerServiceImp.findById(customerid);
 		if(customer.isPresent()) {
 			List<Pet> pets = petServiceImp.findByCustomer(customer.get());
-			map.put("title", "Müşteri Detayları");
+			map.put("title", "Customer Details");
 			map.put("customer", customer.get());
 			map.put("pet", new Pet());
 			map.put("pets", pets);
@@ -124,9 +124,9 @@ public class PetController {
 			return "pet/pet-insert-panel";
 		}else {
 			List<Customer> customers = customerServiceImp.findAll();
-			map.put("title", "Müşteriler");
+			map.put("title", "Customers");
 			map.put("customers", customers);
-			map.put("message", " Kayıt bulunamamıştır.");
+			map.put("message", " No records found.");
 			return "customer/customers";
 		}
 		
@@ -141,24 +141,24 @@ public class PetController {
 			Optional<Customer> customer = customerServiceImp.findById(customerid);
 			if(customer.isPresent()) {
 				if (result.hasErrors()) {
-					map.put("message", " Bir problem oluştu.");				
+					map.put("message", "An issue has occurred.");				
 
 				} else {
 					pet.setCustomer(customer.get());
 					petRepository.save(pet);
-					map.put("message", "Kayıt işlemi başarılı");
+					map.put("message", " No records found.");
 				}
 				List<Pet> pets = petServiceImp.findByCustomer(customer.get());
 				map.put("customer", customer.get());
 				map.put("pet", new Pet());
 				map.put("pets", pets);
-				map.put("title", "Müşteri Ait Hayvanlar");
+				map.put("title", "Animals Belonging to the Customer");
 				return "pet/pets";
 			}else {
 				List<Customer> customers = customerRepository.findAll();
-				map.put("title", "Müşteriler");
+				map.put("title", "Customers");
 				map.put("customers", customers);
-				map.put("message", " Kayıt bulunamamıştır.");
+				map.put("message", " No records found.");
 				return "customer/customers";
 			}
 		} else {
@@ -167,15 +167,15 @@ public class PetController {
 				List<Pet> pets = petServiceImp.findByCustomer(customer.get());
 				map.put("customer", customer.get());
 				map.put("pet", new Pet());
-				map.put("message", "Boş alanları doldurunuz");
+				map.put("message", "Fill in the blank fields.");
 				map.put("pets", pets);
 
 				return "customer/show-customer";
 			} else {
 				List<Customer> customers = customerRepository.findAll();
-				map.put("title", "Müşteriler");
+				map.put("title", "Customers");
 				map.put("customers", customers);
-				map.put("message", "Boş alanları doldurunuz");
+				map.put("message", "Fill in the blank fields.");
 				return "customer/customers";
 			}
 		}
@@ -194,23 +194,23 @@ public class PetController {
 			selected_pet.get().setCustomer(null);
 			Boolean control=petServiceImp.delete(selected_pet.get());
 			if(control==true) {
-				map.put("message","Kayıt başarıyla silinmiştir.");
+				map.put("message","The record has been successfully deleted.");
 			}else {
-				map.put("message","Bir hata oluştu.");
+				map.put("message","An error has occurred.");
 			}
 			Customer customer = customerRepository.findById(customerid).get();
 			
 			List<Pet> pets = petRepository.findByCustomer(customer);
-			map.put("title", "Müşteri Ait Hayvanlar");
+			map.put("title", "Animals Belonging to the Customer");
 			map.put("customer", customer);
 			map.put("pet", new Pet());
 			map.put("pets", pets);
 			return "pet/pets";
 		}else {
 			List<Customer> customers = customerRepository.findAll();
-			map.put("title", "Müşteriler");
+			map.put("title", "Customers");
 			map.put("customers", customers);
-			map.put("message","Pet Kaydı bulunamamıştır.");
+			map.put("message","No pet records found.");
 			return "customer/customers";
 		}
 

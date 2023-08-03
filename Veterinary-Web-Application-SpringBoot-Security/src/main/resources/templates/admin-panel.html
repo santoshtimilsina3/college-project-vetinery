@@ -1,36 +1,74 @@
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--<title>Veteriner Uygulaması</title>-->
+<!--<meta charset="utf-8" />-->
+<!--<meta name="viewport" content="width=device-width, initial-scale=1" />-->
+<!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+<!--</head>-->
+<!--<body>-->
+<!--	<div class="container">-->
+<!--		<div class="row">-->
+<!--			<div lang="tr" th:replace="fragments/header :: header"></div> -->
+<!--			<div lang="tr" th:replace="fragments/header :: title"></div>-->
+<!--			<div class="col-md-6">-->
+<!--				<img alt=""  class="img-thumbnail " src="https://www.bukrek.com/images/veteriner-gunu.jpg">-->
+<!--			</div>		-->
+<!--			<div class="col-md-6">-->
+<!--				<a class="btn btn-success" href="/customer/customers">Musteriler</a>-->
+<!--				<a class="btn btn-primary" href="/customer/insert-customer">Musteri Ekle</a>-->
+<!--				<hr>-->
+<!--				<h1 class="h3 mb-3 font-weight-normal"><span class="badge badge-info">Biz kimiz ?</span></h1>-->
+<!--				<p>Ankara'da 7 GÜN / 24 SAAT açık olan veteriner kliniğimiz-->
+<!--					sizlere ve dostlarınıza maksimum kalitede hizmet vermeyi temel amaç-->
+<!--					edinmiştir. <hr>Dünya standartlarında hekimlik nosyonunu her geçen gün-->
+<!--					üst seviyelere taşıyarak, ülkemiz pet sektöründe lokomotif görevi-->
+<!--					almak; Yenilikleri takip ederek, güncel bilgiler ışığında kaliteli-->
+<!--					ve ulaşılabilir hizmeti verebilmektir.</p>-->
+<!--			</div>-->
+<!--			-->
+<!--		</div>-->
+<!--	</div>-->
+<!--	-->
+
+<!--	<div lang="tr" th:replace="fragments/header :: jsfile"></div>-->
+
+
+<!--</body>-->
+<!--</html>-->
+
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Veteriner Uygulaması</title>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<title>Veterinary Application</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-	<div class="container">
-		<div class="row">
-			<div lang="tr" th:replace="fragments/header :: header"></div> 
-			<div lang="tr" th:replace="fragments/header :: title"></div>
-			<div class="col-md-6">
-				<img alt=""  class="img-thumbnail " src="https://www.bukrek.com/images/veteriner-gunu.jpg">
-			</div>		
-			<div class="col-md-6">
-				<a class="btn btn-success" href="/customer/customers">Musteriler</a>
-				<a class="btn btn-primary" href="/customer/insert-customer">Musteri Ekle</a>
-				<hr>
-				<h1 class="h3 mb-3 font-weight-normal"><span class="badge badge-info">Biz kimiz ?</span></h1>
-				<p>Ankara'da 7 GÜN / 24 SAAT açık olan veteriner kliniğimiz
-					sizlere ve dostlarınıza maksimum kalitede hizmet vermeyi temel amaç
-					edinmiştir. <hr>Dünya standartlarında hekimlik nosyonunu her geçen gün
-					üst seviyelere taşıyarak, ülkemiz pet sektöründe lokomotif görevi
-					almak; Yenilikleri takip ederek, güncel bilgiler ışığında kaliteli
-					ve ulaşılabilir hizmeti verebilmektir.</p>
-			</div>
-			
+<div class="container">
+	<div class="row">
+		<div lang="en" th:replace="fragments/header :: header"></div>
+		<div lang="en" th:replace="fragments/header :: title"></div>
+		<div class="col-md-6">
+			<img alt=""  class="img-thumbnail " src="https://www.bukrek.com/images/veteriner-gunu.jpg">
 		</div>
-	</div>
-	
+		<div class="col-md-6">
+			<a class="btn btn-success" href="/customer/customers">Customers</a>
+			<a class="btn btn-primary" href="/customer/insert-customer">Add Customer</a>
+			<hr>
+			<h1 class="h3 mb-3 font-weight-normal"><span class="badge badge-info">Who Are We?</span></h1>
+			<p>Our veterinary clinic in Ankara is open 7 DAYS / 24 HOURS,
+				committed to providing you and your pets with the highest quality service.
+			<hr>We aim to take the concept of veterinary medicine to the highest
+			standards day by day and to become a locomotive in the pet industry in
+			our country; Following innovations, and providing quality and accessible
+			services based on up-to-date information.</p>
+		</div>
 
-	<div lang="tr" th:replace="fragments/header :: jsfile"></div>
+	</div>
+</div>
+
+
+<div lang="en" th:replace="fragments/header :: jsfile"></div>
 
 
 </body>

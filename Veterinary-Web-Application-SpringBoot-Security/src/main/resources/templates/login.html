@@ -1,42 +1,85 @@
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Veteriner Uygulaması</title>-->
+<!--    <meta charset="utf-8"/>-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1"/>-->
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+<!--    <script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>-->
+<!--    <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--	<div class="row">-->
+<!--		<div lang="tr" th:replace="fragments/header :: header"></div> -->
+<!--		<div lang="tr" th:replace="fragments/header :: title"></div>-->
+
+<!--		<div class="col-md-6" >-->
+<!--			<img alt=""  class="img-thumbnail " src="https://www.bukrek.com/images/veteriner-gunu.jpg">-->
+<!--		</div>-->
+<!--		<div class="col-md-6" style="border:2px solid #ddd">-->
+<!--		    <div class="alert alert-danger" role="alert" th:if="${param.error}">-->
+<!--		        Kullanıcı Adı veya Şifre yanlış.-->
+<!--		    </div>-->
+<!--		    <form th:action="@{/login}" method="post">-->
+<!--		        <label>Email </label>-->
+<!--		        <input type="email" name="username" class="form-control" placeholder="Email giriniz."/>-->
+<!--		        <label>Şifreniz</label>-->
+<!--		        <input type="password" id="password" name="password" class="form-control" placeholder="Şifre giriniz."/>-->
+<!--		        <br/>-->
+<!--		        <button class="btn btn-primary text-center form-control" type="submit">Giriş Yap</button>-->
+<!--		        <br/>-->
+<!--		        <br/>-->
+<!--		        <div class="margin-top20 text-center"><a th:href="@{/register}">Üye Olma Sayfasına Git</a>-->
+<!--	        	<hr>-->
+<!--		        </div>-->
+<!--		    </form>-->
+<!--		</div>-->
+<!--	</div>-->
+<!--</div>-->
+
+<!--	<div lang="tr" th:replace="fragments/header :: jsfile"></div>-->
+<!--</body>-->
+<!--</html>-->
+
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Veteriner Uygulaması</title>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	<title>Veterinary Application</title>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="container">
 	<div class="row">
-		<div lang="tr" th:replace="fragments/header :: header"></div> 
-		<div lang="tr" th:replace="fragments/header :: title"></div>
+		<div lang="en" th:replace="fragments/header :: header"></div>
+		<div lang="en" th:replace="fragments/header :: title"></div>
 
 		<div class="col-md-6" >
 			<img alt=""  class="img-thumbnail " src="https://www.bukrek.com/images/veteriner-gunu.jpg">
 		</div>
 		<div class="col-md-6" style="border:2px solid #ddd">
-		    <div class="alert alert-danger" role="alert" th:if="${param.error}">
-		        Kullanıcı Adı veya Şifre yanlış.
-		    </div>
-		    <form th:action="@{/login}" method="post">
-		        <label>Email </label>
-		        <input type="email" name="username" class="form-control" placeholder="Email giriniz."/>
-		        <label>Şifreniz</label>
-		        <input type="password" id="password" name="password" class="form-control" placeholder="Şifre giriniz."/>
-		        <br/>
-		        <button class="btn btn-primary text-center form-control" type="submit">Giriş Yap</button>
-		        <br/>
-		        <br/>
-		        <div class="margin-top20 text-center"><a th:href="@{/register}">Üye Olma Sayfasına Git</a>
-	        	<hr>
-		        </div>
-		    </form>
+			<div class="alert alert-danger" role="alert" th:if="${param.error}">
+				Incorrect Username or Password.
+			</div>
+			<form th:action="@{/login}" method="post">
+				<label>Email</label>
+				<input type="email" name="username" class="form-control" placeholder="Enter email."/>
+				<label>Your Password</label>
+				<input type="password" id="password" name="password" class="form-control" placeholder="Enter password."/>
+				<br/>
+				<button class="btn btn-primary text-center form-control" type="submit">Log In</button>
+				<br/>
+				<br/>
+				<div class="margin-top20 text-center"><a th:href="@{/register}">Go to Registration Page</a>
+					<hr>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
 
-	<div lang="tr" th:replace="fragments/header :: jsfile"></div>
+<div lang="en" th:replace="fragments/header :: jsfile"></div>
 </body>
 </html>

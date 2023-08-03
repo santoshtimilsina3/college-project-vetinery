@@ -41,6 +41,7 @@ import com.example.demo.util.ApiPaths;
 @Controller
 @RequestMapping(ApiPaths.CustomerBasicCtrl.CTRL)
 public class CustomerController {
+
 	@Autowired
 	PetRepository petRepository;
 	@Autowired
@@ -58,7 +59,7 @@ public class CustomerController {
 	public String getAllCustomers(Map<String, Object> map) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		List<Customer> customers = customerServiceImp.findAll();
-		map.put("title", "Müşteriler");
+		map.put("title", "Customers");
 		map.put("adminname", auth.getName());
 		map.put("customers", customers);
 		return "customer/customers";
@@ -74,7 +75,7 @@ public class CustomerController {
         int pageSize = size.orElse(5);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Page<Customer> customers = customerServiceImp.GetAllPagination(PageRequest.of(currentPage - 1, pageSize));
-		map.put("title", "Müşteriler");
+		map.put("title", "Customers");
 		map.put("adminname", auth.getName());
 		map.put("customers", customers);
 		customers.getContent().forEach(aa->{
@@ -88,7 +89,7 @@ public class CustomerController {
 	@RequestMapping(value = "/get-customers", method = RequestMethod.GET)
 	public String getAnyCustomers(@RequestParam("name") String name,Map<String, Object> map) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		map.put("title", "Müşteriler");
+		map.put("title", "Customers");
 		map.put("adminname", auth.getName());
 		List<Customer> customers=null;
 		customers = customerServiceImp.findByFirstname(name);
@@ -104,7 +105,7 @@ public class CustomerController {
 			}else {
 				customers = customerServiceImp.findAll();
 				map.put("customers", customers);
-				map.put("message", " Kayıt bulunamamıştır.");
+				map.put("message", " No records found.");
 			}
 		}
 		return "customer/customers";
@@ -113,7 +114,7 @@ public class CustomerController {
 	@RequestMapping(value = "/insert-customer", method = RequestMethod.GET)
 	public String CustomerRegisterPanel(Map<String, Object> map) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		map.put("title", "Müşteri Ekleme Bölümü");
+		map.put("title", "Customer Addition Section");
 		map.put("adminname", auth.getName());
 		map.put("customer", new Customer());
 		map.put("citys", new ArrayList<Citys>(Arrays.asList(Citys.values())));
@@ -126,15 +127,15 @@ public class CustomerController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		map.put("adminname", auth.getName());
 		map.put("customer", new Customer());
-		map.put("title", "Müşteri Ekleme Bölümü");
+		map.put("title", "Customer Addition Section");
 		if (result.hasErrors()) {
 			return "customer-insert-panel";
 		} else {
 			Boolean control=customerServiceImp.save(customer);
 			if(control==false) {
-				map.put("message", "Bir Problem Oluştu..");
+				map.put("message", "An Issue Occurred.");
 			}else {
-				map.put("message", "Kayıt işlemi başarlı");
+				map.put("message", "Registration process successful");
 			}
 		}
 
@@ -149,15 +150,15 @@ public class CustomerController {
 
 		Optional<Customer> customer = customerServiceImp.findById(customerid);
 		if(customer.isPresent()) {
-			map.put("title", "Müşteri Detayları");
+			map.put("title", "Customer Details");
 			map.put("customer", customer.get());
 
 			return "customer/show-customer";
 		}else {
 			List<Customer> customers = customerServiceImp.findAll();
-			map.put("title", "Müşteriler");
+			map.put("title", "Customers");
 			map.put("customers", customers);
-			map.put("message", " Kayıt bulunamamıştır.");
+			map.put("message", " No records found.");
 			return "customer/customers";
 		}
 	}
@@ -170,15 +171,15 @@ public class CustomerController {
 
 		Optional<Customer> customer = customerServiceImp.findById(customerid);
 		if(customer.isPresent()) {
-			map.put("title", "Müşteri Güncelleme Bölümü");
+			map.put("title", "Customer Update Section");
 			map.put("customer", customer.get());
 			map.put("citys", new ArrayList<Citys>(Arrays.asList(Citys.values())));
 			return "customer/customer-update-panel";
 		}else {
 			List<Customer> customers = customerServiceImp.findAll();
-			map.put("title", "Müşteriler");
+			map.put("title", "Customers");
 			map.put("customers", customers);
-			map.put("message", " Kayıt bulunamamıştır.");
+			map.put("message", " No records found.");
 			return "customer/customers";
 		}
 
@@ -191,18 +192,18 @@ public class CustomerController {
 		map.put("adminname", auth.getName());
 		map.put("customer", new Customer());
 		if (result.hasErrors()) {
-			map.put("title", "Müşteri Ekle");
+			map.put("title", "Add Customer");
 			return "customer-insert-panel";
 		} else {
 			Boolean control=customerServiceImp.save(customer);
 			if(control==false) {
-				map.put("message", "Bir Problem Oluştu..");
+				map.put("message", "An Issue Occurred.");
 			}else {
-				map.put("message", "Kayıt güncelleme işlemi başarlı.");
+				map.put("message", " Record update process is successful.");
 			}
 		}
 		List<Customer> customers = customerServiceImp.findAll();
-		map.put("title", "Müşteriler");
+		map.put("title", "Customers");
 		map.put("adminname", auth.getName());
 		map.put("customers", customers);
 		return "customer/customers";
@@ -216,16 +217,16 @@ public class CustomerController {
 		if(customer.isPresent()) {
 			Boolean control=customerServiceImp.delete(customer.get());
 			if(control == true) {
-				map.put("message", "Kayıt silinmiştir.");
+				map.put("message", "Record has been deleted.");
 			}else {
-				map.put("message", " Kayıt silme işlemi başarısız.");
+				map.put("message", " Customer Update Section");
 			}
 		}else {
-			map.put("message", " Kayıt bulunamamıştır.");
+			map.put("message", " No records found.");
 			
 		}
 		List<Customer> customers = customerServiceImp.findAll();
-		map.put("title", "Müşteriler");
+		map.put("title", "Customers");
 		map.put("customers", customers);
 		return "customer/customers";
 	}

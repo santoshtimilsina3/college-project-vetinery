@@ -1,13 +1,13 @@
 package com.example.demo.model;
 
 public enum Animals {
-	KUŞ,
-	KAPLUMBAĞA,
-	KEDİ,
-	KÖPEK,
-	KURBAĞA,
-	PAPAĞAN,
-	YILAN,
-	BALIK,
-	VATOZ
+	BIRD,
+	TURTLE,
+	CAT,
+	DOG,
+	FROG,
+	PARROT,
+	SNAKE,
+	FISH,
+	CATFISH
 }

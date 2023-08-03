@@ -1,52 +1,105 @@
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Veteriner Uygulaması</title>-->
+<!--    <meta charset="utf-8"/>-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1"/>-->
+<!--	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--	<div class="row">-->
+<!--		<div lang="tr" th:replace="fragments/header :: header"></div> -->
+<!--		<div lang="tr" th:replace="fragments/header :: title"></div>-->
+
+<!--		<div class="col-md-6">-->
+<!--			<img alt=""  class="img-thumbnail " src="https://www.bukrek.com/images/veteriner-gunu.jpg">-->
+<!--		</div>	-->
+<!--		<div class="col-md-6" style="border:3px solid #ddd">-->
+<!--			<h1 class="h3 mb-3 font-weight-normal">Müşteri Güncelleme Bölümü</h1>-->
+<!--		    <hr>	-->
+<!--			<div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${message}">-->
+<!--				<strong th:text="${message}"></strong> -->
+<!--				<button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
+<!--				<span aria-hidden="true">&times;</span>-->
+<!--				</button>-->
+<!--			</div>-->
+<!--		    <form autocomplete="off" action="#" th:action="@{/customer/update-customer}" th:object="${customer}" method="post">-->
+<!--				<input type="hidden" th:value="${customerid}" th:field="*{customerid}" />-->
+<!--		        <label>Müşteri Adı </label>-->
+<!--		        <input type="text" id="firstName" placeholder="First Name" th:field="*{firstname}" class="form-control" required="required"/><br/>-->
+<!--		        <label>Müşteri Soyadı </label> <input type="text" id="lastname" placeholder="First Name" th:field="*{lastname}" class="form-control" required="required"/><br/>-->
+<!--		        <label>Telefon Numarası</label>-->
+<!--		        <input type="text" id="phone_number" placeholder="Telefon Numarası" th:field="*{phone_number}" class="form-control" required="required"/><br/>-->
+<!--    			<label>Şehir Seçiniz.</label>-->
+<!--				<select name="city" th:field="*{city}" class="form-control">-->
+<!--				 <option -->
+<!--				          th:value="${city}" -->
+<!--				          th:text="${city}"></option>-->
+<!--				  <option th:each="city : ${citys}" -->
+<!--				          th:value="${city.name()}" -->
+<!--				          th:text="${city.name()}"></option>-->
+<!--				</select>-->
+<!--				<br/>-->
+<!--		        <label>Email</label>-->
+<!--		        <input type="email" id="email" placeholder=" Email" th:field="*{email}" class="form-control" required="required"/><br/>-->
+<!--		        <button type="submit" class="btn btn-primary text-center form-control">Güncelle</button>-->
+<!--		    </form>-->
+<!--    		<div class="margin-top20 text-center"><a th:href="@{/customer/customers}">Müşterileri Gör</a></div>-->
+<!--		</div>-->
+<!--	</div>-->
+<!--</div>-->
+<!--	<div lang="tr" th:replace="fragments/header :: jsfile"></div></body>-->
+<!--</html>-->
+
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Veteriner Uygulaması</title>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>Veterinary Application</title>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
 	<div class="row">
-		<div lang="tr" th:replace="fragments/header :: header"></div> 
-		<div lang="tr" th:replace="fragments/header :: title"></div>
+		<div lang="en" th:replace="fragments/header :: header"></div>
+		<div lang="en" th:replace="fragments/header :: title"></div>
 
 		<div class="col-md-6">
 			<img alt=""  class="img-thumbnail " src="https://www.bukrek.com/images/veteriner-gunu.jpg">
-		</div>	
+		</div>
 		<div class="col-md-6" style="border:3px solid #ddd">
-			<h1 class="h3 mb-3 font-weight-normal">Müşteri Güncelleme Bölümü</h1>
-		    <hr>	
+			<h1 class="h3 mb-3 font-weight-normal">Customer Update Section</h1>
+			<hr>
 			<div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${message}">
-				<strong th:text="${message}"></strong> 
+				<strong th:text="${message}"></strong>
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
+					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-		    <form autocomplete="off" action="#" th:action="@{/customer/update-customer}" th:object="${customer}" method="post">
+			<form autocomplete="off" action="#" th:action="@{/customer/update-customer}" th:object="${customer}" method="post">
 				<input type="hidden" th:value="${customerid}" th:field="*{customerid}" />
-		        <label>Müşteri Adı </label>
-		        <input type="text" id="firstName" placeholder="First Name" th:field="*{firstname}" class="form-control" required="required"/><br/>
-		        <label>Müşteri Soyadı </label> <input type="text" id="lastname" placeholder="First Name" th:field="*{lastname}" class="form-control" required="required"/><br/>
-		        <label>Telefon Numarası</label>
-		        <input type="text" id="phone_number" placeholder="Telefon Numarası" th:field="*{phone_number}" class="form-control" required="required"/><br/>
-    			<label>Şehir Seçiniz.</label>
+				<label>Customer First Name</label>
+				<input type="text" id="firstName" placeholder="First Name" th:field="*{firstname}" class="form-control" required="required"/><br/>
+				<label>Customer Last Name</label> <input type="text" id="lastname" placeholder="First Name" th:field="*{lastname}" class="form-control" required="required"/><br/>
+				<label>Phone Number</label>
+				<input type="text" id="phone_number" placeholder="Phone Number" th:field="*{phone_number}" class="form-control" required="required"/><br/>
+				<label>Select City</label>
 				<select name="city" th:field="*{city}" class="form-control">
-				 <option 
-				          th:value="${city}" 
-				          th:text="${city}"></option>
-				  <option th:each="city : ${citys}" 
-				          th:value="${city.name()}" 
-				          th:text="${city.name()}"></option>
+					<option
+							th:value="${city}"
+							th:text="${city}"></option>
+					<option th:each="city : ${citys}"
+							th:value="${city.name()}"
+							th:text="${city.name()}"></option>
 				</select>
 				<br/>
-		        <label>Email</label>
-		        <input type="email" id="email" placeholder=" Email" th:field="*{email}" class="form-control" required="required"/><br/>
-		        <button type="submit" class="btn btn-primary text-center form-control">Güncelle</button>
-		    </form>
-    		<div class="margin-top20 text-center"><a th:href="@{/customer/customers}">Müşterileri Gör</a></div>
+				<label>Email</label>
+				<input type="email" id="email" placeholder=" Email" th:field="*{email}" class="form-control" required="required"/><br/>
+				<button type="submit" class="btn btn-primary text-center form-control">Update</button>
+			</form>
+			<div class="margin-top20 text-center"><a th:href="@{/customer/customers}">View Customers</a></div>
 		</div>
 	</div>
 </div>
-	<div lang="tr" th:replace="fragments/header :: jsfile"></div></body>
+<div lang="en" th:replace="fragments/header :: jsfile"></div></body>
 </html>

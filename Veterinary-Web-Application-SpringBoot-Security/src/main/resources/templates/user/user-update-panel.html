@@ -1,64 +1,130 @@
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Veteriner Uygulaması</title>-->
+<!--    <meta charset="utf-8"/>-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1"/>-->
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--	<div class="row">-->
+<!--		<div lang="tr" th:replace="fragments/header :: header"></div> -->
+<!--		<div lang="tr" th:replace="fragments/header :: title"></div>-->
+
+<!--		<div class="col-md-6">-->
+<!--			<img alt=""  class="img-thumbnail " src="https://www.bukrek.com/images/veteriner-gunu.jpg">-->
+<!--		</div>-->
+<!--		<div class="col-md-6" >-->
+<!--			<div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${message}">-->
+<!--				<strong th:text="${message}"></strong> -->
+<!--				<button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
+<!--				<span aria-hidden="true">&times;</span>-->
+<!--				</button>-->
+<!--			</div>-->
+<!--			<h5 style="text-align: center;margin: auto;" class="list-group-item active" >Bilgileri Güncelle</h5><hr>-->
+<!--		    <form autocomplete="off" action="#" th:action="@{/user/update-user/}" th:object="${user}" method="post">-->
+<!--		   		<input type="hidden" th:value="${user_id}" th:field="*{user_id}" />-->
+<!--		        <label>Kullanıcı Adı</label>-->
+<!--		        <input type="text" id="firstName" placeholder="First Name" th:value="${username}" th:field="*{username}" class="form-control" required="required"/><br/>-->
+<!--		        <label>İsim</label>-->
+<!--		        <input type="text" id="firstName" placeholder="First Name" th:value="${firstname}" th:field="*{firstname}" class="form-control" required="required"/><br/>-->
+<!--		        <label>Soyisim </label>-->
+<!--		        <input type="text" id="lastname" placeholder="Last Name" th:value="${lastname}" th:field="*{lastname}" class="form-control" required="required"/><br/>-->
+<!--		        <label>Cinsiyet </label>-->
+<!--				<ul>-->
+<!--					<li>-->
+<!--						<input type="radio"  th:field="*{gender}" th:value="'male	'" />-->
+<!--						<label  th:text="'male'"></label>    -->
+<!--						<input type="radio"  th:field="*{gender}" th:value="'female'" />-->
+<!--						<label th:text="'female'"></label>-->
+<!--					</li>-->
+<!--				</ul>-->
+<!--				<label>Şehir Seçiniz.</label>-->
+<!--				<select name="city" th:field="*{city}" class="form-control">-->
+<!--				 <option -->
+<!--				          th:value="${city}" -->
+<!--				          th:text="${city}"></option>-->
+<!--				  <option th:each="city : ${citys}" -->
+<!--				          th:value="${city.name()}" -->
+<!--				          th:text="${city.name()}"></option>-->
+<!--				</select>-->
+<!--				<br/>-->
+<!--		        <label>Eposta</label>-->
+<!--		        <input type="text" id="email" placeholder=" Email" th:value="${email}" th:field="*{email}" class="form-control" required="required"/><br/>-->
+<!--				<button type="submit" class="btn btn-primary text-center form-control">Kaydet</button>-->
+<!--		    </form>-->
+<!--		    </div>-->
+<!--    	</div>-->
+<!--	</div>-->
+<!--</div>-->
+
+<!--	<div lang="tr" th:replace="fragments/header :: jsfile"></div>-->
+
+
+<!--</body>-->
+<!--</html>-->
+
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Veteriner Uygulaması</title>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<title>Veterinary Application</title>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
 	<div class="row">
-		<div lang="tr" th:replace="fragments/header :: header"></div> 
-		<div lang="tr" th:replace="fragments/header :: title"></div>
+		<div lang="en" th:replace="fragments/header :: header"></div>
+		<div lang="en" th:replace="fragments/header :: title"></div>
 
 		<div class="col-md-6">
 			<img alt=""  class="img-thumbnail " src="https://www.bukrek.com/images/veteriner-gunu.jpg">
 		</div>
 		<div class="col-md-6" >
 			<div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${message}">
-				<strong th:text="${message}"></strong> 
+				<strong th:text="${message}"></strong>
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
+					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<h5 style="text-align: center;margin: auto;" class="list-group-item active" >Bilgileri Güncelle</h5><hr>
-		    <form autocomplete="off" action="#" th:action="@{/user/update-user/}" th:object="${user}" method="post">
-		   		<input type="hidden" th:value="${user_id}" th:field="*{user_id}" />
-		        <label>Kullanıcı Adı</label>
-		        <input type="text" id="firstName" placeholder="First Name" th:value="${username}" th:field="*{username}" class="form-control" required="required"/><br/>
-		        <label>İsim</label>
-		        <input type="text" id="firstName" placeholder="First Name" th:value="${firstname}" th:field="*{firstname}" class="form-control" required="required"/><br/>
-		        <label>Soyisim </label>
-		        <input type="text" id="lastname" placeholder="Last Name" th:value="${lastname}" th:field="*{lastname}" class="form-control" required="required"/><br/>
-		        <label>Cinsiyet </label>
+			<h5 style="text-align: center;margin: auto;" class="list-group-item active" >Update Information</h5><hr>
+			<form autocomplete="off" action="#" th:action="@{/user/update-user/}" th:object="${user}" method="post">
+				<input type="hidden" th:value="${user_id}" th:field="*{user_id}" />
+				<label>Username</label>
+				<input type="text" id="firstName" placeholder="Username" th:value="${username}" th:field="*{username}" class="form-control" required="required"/><br/>
+				<label>First Name</label>
+				<input type="text" id="firstName" placeholder="First Name" th:value="${firstname}" th:field="*{firstname}" class="form-control" required="required"/><br/>
+				<label>Last Name </label>
+				<input type="text" id="lastname" placeholder="Last Name" th:value="${lastname}" th:field="*{lastname}" class="form-control" required="required"/><br/>
+				<label>Gender </label>
 				<ul>
 					<li>
-						<input type="radio"  th:field="*{gender}" th:value="'male	'" />
-						<label  th:text="'male'"></label>    
+						<input type="radio"  th:field="*{gender}" th:value="'male'" />
+						<label  th:text="'male'"></label>
 						<input type="radio"  th:field="*{gender}" th:value="'female'" />
 						<label th:text="'female'"></label>
 					</li>
 				</ul>
-				<label>Şehir Seçiniz.</label>
+				<label>Select City</label>
 				<select name="city" th:field="*{city}" class="form-control">
-				 <option 
-				          th:value="${city}" 
-				          th:text="${city}"></option>
-				  <option th:each="city : ${citys}" 
-				          th:value="${city.name()}" 
-				          th:text="${city.name()}"></option>
+					<option
+							th:value="${city}"
+							th:text="${city}"></option>
+					<option th:each="city : ${citys}"
+							th:value="${city.name()}"
+							th:text="${city.name()}"></option>
 				</select>
 				<br/>
-		        <label>Eposta</label>
-		        <input type="text" id="email" placeholder=" Email" th:value="${email}" th:field="*{email}" class="form-control" required="required"/><br/>
-				<button type="submit" class="btn btn-primary text-center form-control">Kaydet</button>
-		    </form>
-		    </div>
-    	</div>
+				<label>Email</label>
+				<input type="text" id="email" placeholder=" Email" th:value="${email}" th:field="*{email}" class="form-control" required="required"/><br/>
+				<button type="submit" class="btn btn-primary text-center form-control">Save</button>
+			</form>
+		</div>
 	</div>
 </div>
+</div>
 
-	<div lang="tr" th:replace="fragments/header :: jsfile"></div>
+<div lang="en" th:replace="fragments/header :: jsfile"></div>
 
 
 </body>

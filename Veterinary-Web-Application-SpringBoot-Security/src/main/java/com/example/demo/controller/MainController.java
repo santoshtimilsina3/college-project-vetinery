@@ -58,7 +58,7 @@ public class MainController {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			map.put("adminname", auth.getName());
 		}
-		map.put("title", "Veteriner Anasayfası");
+		map.put("title", "Veterinary Homepage");
 		return "index";
 	}
 
@@ -68,14 +68,14 @@ public class MainController {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			map.put("adminname", auth.getName());
 		}
-		map.put("title", "Veteriner Anasayfası");
+		map.put("title", "Veterinary Homepage");
 		return "index";
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String registerPage(Model model, Map<String, Object> map) {
 		List<Role> roles = roleRepository.findAll();
-		map.put("title", "Doktor Kayıt Sayfası");
+		map.put("title", "Doctor Registration Page");
 		map.put("roles", roles);
 		map.put("citys", new ArrayList<Citys>(Arrays.asList(Citys.values())));
 		model.addAttribute("user", new User());
@@ -86,16 +86,16 @@ public class MainController {
 	public String saveRegisterPage(@Valid @ModelAttribute("user") User user, BindingResult result, Model model,
 			Map<String, Object> map, HttpServletRequest request) throws SQLException {
 
-		map.put("title", "Doktor Kayıt Sayfası");
+		map.put("title", "Doctor Registration Page");
 		model.addAttribute("user", user);
 		List<User> user_control = userRepository.getUserByEmail(user.getEmail());
 		// to control whether there is user with this email
 		if (user_control.size() > 0) {
-			map.put("message", "Bu email adresi mevcuttur...");
+			map.put("message", "This email address already exists...");
 
 		} else {
 			if (result.hasErrors()) {
-				map.put("message", "Bu Hata Oluştu..");
+				map.put("message", "An error occurred...");
 				return "register";
 			} else {
 				int id = Integer.valueOf(request.getParameter("roles"));
@@ -109,7 +109,7 @@ public class MainController {
 				String pwd = user.getPassword();
 				String encryptPwd = passwordEncoder.encode(pwd);
 				user.setPassword(encryptPwd);
-				map.put("message", "Kayıt işlemi başarılı.");
+				map.put("message", "Registration process successful.");
 				userRepository.save(user);
 			}
 		}
@@ -120,7 +120,7 @@ public class MainController {
 
 	@RequestMapping("/login")
 	public String login(Map<String, Object> map) {
-		map.put("title", "Doktor Giriş Sayfası");
+		map.put("title", "Doctor Login Page");
 		return "login";
 	}
 
@@ -129,7 +129,7 @@ public class MainController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		map.put("adminname", auth.getName());
-		map.put("title", "Yönetim Paneli");
+		map.put("title", "Management Panel");
 		return "admin-panel";
 	}
 	@ResponseBody

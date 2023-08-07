@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.example.demo.enums.Citys;
 import lombok.Getter;
 import lombok.Setter;
 

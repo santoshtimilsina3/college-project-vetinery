@@ -26,4 +26,8 @@ public final class ApiPaths {
     public static final class PetCtrl {
         public static final String CTRL = BASE_PATH + "/pet";
     }
+    public static final class AppointmentCtrl {
+        public static final String CTRL = BASE_PATH + "/appointment";
+    }
+
 }

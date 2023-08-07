@@ -34,12 +34,8 @@ public class SpringJsfExample2Application implements CommandLineRunner  {
 		role2.setRole("USER");
 		role2.setRole_id(2);
 		Role role3=new Role();
-		role3.setRole("EDITOR");
-		role3.setRole_id(3);
 		rolerepository.save(role1);
 		rolerepository.save(role2);
-		rolerepository.save(role3);
-		
 	}
 
 }

@@ -1,10 +1,8 @@
 package com.example.demo.controller;
 
-import java.nio.file.AccessDeniedException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,7 +12,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -28,12 +25,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.demo.model.Citys;
+import com.example.demo.enums.Citys;
 import com.example.demo.model.Customer;
-import com.example.demo.model.Pet;
-import com.example.demo.model.Role;
-import com.example.demo.model.User;
-import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.PetRepository;
 import com.example.demo.service.Imp.CustomerServiceImp;
 import com.example.demo.util.ApiPaths;

@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import javax.persistence.*;
 
+import com.example.demo.enums.Animals;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "pet")

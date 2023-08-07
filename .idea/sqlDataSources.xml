@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="511210b3-1dd9-42ee-8c52-82a4fcb7d71a" name="auth@localhost Mapping">
+      <data-sources db="922e9e10-f927-45b6-8ccc-ad0a842bd6a4" />
+      <scope>
+        <node kind="schema" qname="auth" />
+      </scope>
+    </mapping>
+  </component>
+</project>

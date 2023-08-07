@@ -1,11 +1,10 @@
 package com.example.demo.model;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.demo.enums.Citys;
 
 import lombok.Getter;
 import lombok.Setter;

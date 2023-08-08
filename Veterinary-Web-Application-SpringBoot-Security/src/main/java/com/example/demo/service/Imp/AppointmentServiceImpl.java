@@ -2,22 +2,31 @@ package com.example.demo.service.Imp;
 
 import com.example.demo.enums.AppointmentStatus;
 import com.example.demo.model.Appointment;
+import com.example.demo.model.ClusterData;
 import com.example.demo.model.Pet;
 import com.example.demo.repository.AppointmentRepository;
 import com.example.demo.service.AppointmentService;
+import com.example.demo.service.DoublePoint;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.math3.ml.clustering.Cluster;
+import org.apache.commons.math3.ml.clustering.Clusterer;
+import org.apache.commons.math3.ml.clustering.KMeansPlusPlusClusterer;
+import org.apache.commons.math3.ml.distance.DistanceMeasure;
+import org.apache.commons.math3.ml.distance.EuclideanDistance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AppointmentServiceImpl implements AppointmentService {
+
 
     @Autowired
     AppointmentRepository repository;
@@ -65,5 +74,45 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
         return "Failed";
     }
+
+    @Override
+    public List<ClusterData> calcualteClustering() {
+        List<Appointment> appointments = repository.findAll(); // Fetch appointment data from the database
+
+        List<ClusterData> clusteredData = performKMeansClustering(appointments);
+
+        return clusteredData;
+    }
+
+    public List<ClusterData> performKMeansClustering(List<Appointment> appointments) {
+        List<DoublePoint> features = new ArrayList<>();
+
+        // Convert LocalDateTime to hour of the day for clustering
+        for (Appointment appointment : appointments) {
+            int hourOfDay = appointment.getDateTime().getHour();
+            features.add(new DoublePoint((double) hourOfDay));
+        }
+
+        int numClusters = 2; // Morning and afternoon
+        DistanceMeasure distanceMeasure = new EuclideanDistance();
+        Clusterer<DoublePoint> clusterer = new KMeansPlusPlusClusterer<>(numClusters, 1000, distanceMeasure);
+        List<Cluster<DoublePoint>> clusters = (List<Cluster<DoublePoint>>) clusterer.cluster(features);
+
+        // Prepare clustered data for frontend
+        List<ClusterData> clusteredData = new ArrayList<>();
+        for (int i = 0; i < clusters.size(); i++) {
+            ClusterData clusterData = new ClusterData();
+            clusterData.setClusterNumber(i);
+            List<Integer> appointmentHours = new ArrayList<>();
+            for (DoublePoint point : clusters.get(i).getPoints()) {
+                appointmentHours.add((int) point.getPoint()[0]);
+            }
+            clusterData.setAppointmentHours(appointmentHours);
+            clusteredData.add(clusterData);
+        }
+
+        return clusteredData;
+    }
+
 
 }

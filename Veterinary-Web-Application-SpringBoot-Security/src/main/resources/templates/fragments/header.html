@@ -1,7 +1,7 @@
 
 <meta charset="utf-8" />
 <nav lang="en" class="col-md-12 navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="header">
-	<a class="navbar-brand" href="#">Navbar</a>
+<!--	<a class="active" href="#"><i class="fa fa-fw fa-home"></i> Home</a>-->
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -21,6 +21,9 @@
 			</li>
 			<li class="nav-item">
 				<a class="nav-link " href="/admin-panel">Admin Panel</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link " href="/stat-panel">Stats Panel</a>
 			</li>
 			<li class="nav-item" th:unless="${adminname}">
 				<a class="nav-link" href="/login">Login</a>

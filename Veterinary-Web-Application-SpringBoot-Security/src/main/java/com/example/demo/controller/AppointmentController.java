@@ -33,14 +33,13 @@ public class AppointmentController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Appointment bookAppointment(@RequestBody AppointmentBookDto appointmentBookDto,
+    public @ResponseBody Appointment bookAppointment(@RequestBody AppointmentBookDto appointmentBookDto,
                                        @RequestParam Long petId) {
         LocalDate appointmentDate = LocalDate.parse(appointmentBookDto.getAppointmentDate());
         LocalTime appointmentTime = LocalTime.parse(appointmentBookDto.getAppointmentTime());
 
         Appointment newAppointment = appointmentService.bookAppointment(petId, appointmentDate, appointmentTime);
-        return newAppointment;
+        return newAppointment ;
 
     }
 

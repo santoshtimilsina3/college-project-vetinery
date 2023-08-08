@@ -1,0 +1,75 @@
+
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Veterinary Application</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+  <div class="row">
+    <div lang="en" th:replace="fragments/header :: header"></div>
+    <div lang="en" th:replace="fragments/header :: title"></div>
+
+    <canvas id="clusterChart" ></canvas>
+
+
+  </div>
+</div>
+
+
+<div lang="en" th:replace="fragments/header :: jsfile"></div>
+
+<!--<script>-->
+<!--  // Make an API call to retrieve cluster data-->
+<!--  fetch('/api/appointment/clusters')-->
+<!--          .then(response => response.json())-->
+<!--          .then(data => {-->
+<!--            const clusterLabels = data.map(cluster => `Cluster ${cluster.clusterNumber}`);-->
+<!--            const clusterData = data.map(cluster => cluster.clusterPoints);-->
+
+<!--            const ctx = document.getElementById('clusterChart').getContext('2d');-->
+<!--            new Chart(ctx, {-->
+<!--              type: 'line', // You can use other chart types as needed-->
+<!--              data: {-->
+<!--                labels: clusterLabels,-->
+<!--                datasets: [{-->
+<!--                  label: 'Hour of the Day',-->
+<!--                  data: clusterData,-->
+<!--                  borderColor: 'rgba(75, 192, 192, 1)',-->
+<!--                  fill: false-->
+<!--                }]-->
+<!--              }-->
+<!--            });-->
+<!--          });-->
+<!--</script>-->
+<script>
+  // Make an API call to retrieve cluster data
+  fetch('/api/appointment/clusters')
+          .then(response => response.json())
+
+          .then(data => {
+            const clusterLabels = data.map(cluster => `Cluster ${cluster.clusterNumber}`);
+            const clusterData = data.map(cluster => cluster.appointmentHours); // Assuming appointmentHours contains actual hours
+
+            const ctx = document.getElementById('clusterChart').getContext('2d');
+            new Chart(ctx, {
+              type: 'line',
+              data: {
+                labels: clusterLabels,
+                datasets: clusterData.map((appointmentHours, index) => ({
+                  label: clusterLabels[index],
+                  data: appointmentHours,
+                  borderColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`,
+                  fill: false
+                }))
+              }
+            });
+          });
+</script>
+</body>
+</html>

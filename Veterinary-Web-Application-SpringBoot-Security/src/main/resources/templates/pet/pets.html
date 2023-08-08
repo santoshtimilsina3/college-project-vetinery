@@ -187,18 +187,13 @@
         })
             .then(response => response.text())
             .then(data => {
-                console.log(typeof data);
-                console.log(data);
-                console.log("Response from server:", data);
-
-                let response = JSON.parse(data);
-                let modal = document.getElementById('bookAppointmentModal');
+        let modal = document.getElementById('bookAppointmentModal');
                 modal.style.display = "none";
                 // You can perform further actions or display messages as needed
                 alert("Booking SuccessFull !!!");
             })
             .catch(error => {
-                console.error("Error:", error);
+                console.error("Error:");
             });
 
     }
@@ -274,15 +269,15 @@
                     <td>${formattedTime}</td>
                     <td>
                         <select class="form-control appointment-status" data-appointment-id="${appointment.appointmentId}">
-    <option value="CONFIRMED" ${appointment.status === 'CONFIRMED' ? 'selected' : ''}>CONFIRMED</option>
-    <option value="PENDING" ${appointment.status === 'PENDING' ? 'selected' : ''}>PENDING</option>
-    <option value="CANCELLED" ${appointment.status === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
-    <option value="COMPLETED" ${appointment.status === 'COMPLETED' ? 'selected' : ''}>COMPLETED</option>
-    <option value="RESCHEDULED" ${appointment.status === 'RESCHEDULED' ? 'selected' : ''}>RESCHEDULED</option>
-    <option value="ON_HOLD" ${appointment.status === 'ON_HOLD' ? 'selected' : ''}>ON HOLD</option>
-    <option value="NO_SHOW" ${appointment.status === 'NO_SHOW' ? 'selected' : ''}>NO SHOW</option>
-    <option value="ARRIVED" ${appointment.status === 'ARRIVED' ? 'selected' : ''}>ARRIVED</option>
-</select>
+       <option value="CONFIRMED" ${appointment.status === 'CONFIRMED' ? 'selected' : ''}>CONFIRMED</option>
+     <option value="PENDING" ${appointment.status === 'PENDING' ? 'selected' : ''}>PENDING</option>
+     <option value="CANCELLED" ${appointment.status === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
+     <option value="COMPLETED" ${appointment.status === 'COMPLETED' ? 'selected' : ''}>COMPLETED</option>
+     <option value="RESCHEDULED" ${appointment.status === 'RESCHEDULED' ? 'selected' : ''}>RESCHEDULED</option>
+        <option value="ON_HOLD" ${appointment.status === 'ON_HOLD' ? 'selected' : ''}>ON HOLD</option>
+        <option value="NO_SHOW" ${appointment.status === 'NO_SHOW' ? 'selected' : ''}>NO SHOW</option>
+     <option value="ARRIVED" ${appointment.status === 'ARRIVED' ? 'selected' : ''}>ARRIVED</option>
+    </select>
 
                     </td>
                 `;
@@ -299,7 +294,6 @@
                             dropdown.addEventListener("change", event => {
                                 const newStatus = event.target.value;
                                 const appointmentId = event.target.getAttribute("data-appointment-id");
-                                debugger;
                            updateStatus(appointmentId, newStatus);
                             });
                         });

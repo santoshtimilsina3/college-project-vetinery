@@ -1,20 +1,24 @@
 package com.example.demo.model;
 
 import com.example.demo.enums.AppointmentStatus;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "appointment")
-public class Appointment {
+public class Appointment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "appointment_id")
+    @JsonProperty("appointmentId")
     private Long appointmentId;
 
     @Column(name = "date_time")
+    @JsonProperty("dateTime")
     private LocalDateTime dateTime;
 
 

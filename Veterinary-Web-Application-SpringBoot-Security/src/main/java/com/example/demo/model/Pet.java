@@ -4,6 +4,9 @@ import javax.persistence.*;
 
 import com.example.demo.enums.Animals;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.List;
+
 @Entity
 @Table(name = "pet")
 public class Pet {

@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Appointment;
+import com.example.demo.model.ClusterData;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,4 +14,6 @@ public interface AppointmentService {
     Appointment bookAppointment(Long pet, LocalDate date, LocalTime time);
 
     String changeStatus(Long id, String status);
+
+    public List<ClusterData> calcualteClustering();
 }

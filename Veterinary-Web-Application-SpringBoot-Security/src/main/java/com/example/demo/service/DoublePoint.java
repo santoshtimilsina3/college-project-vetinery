@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,14 +9,14 @@ import org.apache.commons.math3.ml.clustering.Clusterable;
 @Setter
 @NoArgsConstructor
 public class DoublePoint implements Clusterable {
-    private double value;
+    private double[] point;
 
-    public DoublePoint(double value) {
-        this.value = value;
+    public DoublePoint(double[] point) {
+        this.point = point;
     }
 
     @Override
     public double[] getPoint() {
-        return new double[]{value};
+        return point;
     }
 }

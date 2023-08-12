@@ -51,25 +51,59 @@
   // Make an API call to retrieve cluster data
   fetch('/api/appointment/clusters')
           .then(response => response.json())
-
           .then(data => {
             const clusterLabels = data.map(cluster => `Cluster ${cluster.clusterNumber}`);
-            const clusterData = data.map(cluster => cluster.appointmentHours); // Assuming appointmentHours contains actual hours
+            const clusterData = data.map(cluster => cluster.clusterPoints);
 
             const ctx = document.getElementById('clusterChart').getContext('2d');
             new Chart(ctx, {
-              type: 'line',
+              type: 'scatter',
               data: {
                 labels: clusterLabels,
-                datasets: clusterData.map((appointmentHours, index) => ({
-                  label: clusterLabels[index],
-                  data: appointmentHours,
-                  borderColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`,
-                  fill: false
+                datasets: clusterData.map((cluster, index) => ({
+                  label: `Cluster ${index}`,
+                  data: cluster,
+                  borderColor: getRandomColor(),
+                  pointRadius: 5,
+                  pointHoverRadius: 7,
                 }))
+              },
+              options: {
+                scales: {
+                  x: {
+                    type: 'linear',
+                    position: 'bottom',
+                    title: {
+                      display: true,
+                      text: 'Day of the Week'
+                    },
+                    min: 1,
+                    max: 7
+                  },
+                  y: {
+                    type: 'linear',
+                    position: 'left',
+                    title: {
+                      display: true,
+                      text: 'Time of the Day'
+                    },
+                    min: 0,
+                    max: 24
+                  }
+                }
               }
             });
           });
+
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
 </script>
 </body>
 </html>

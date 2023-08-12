@@ -3,10 +3,15 @@ package com.example.demo.service.Imp;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.demo.dto.response.ApiResponse;
+import com.example.demo.dto.response.ResponseBuilder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Customer;
@@ -20,10 +25,12 @@ public class CustomerServiceImp implements CustomerService {
 	
 	public final CustomerRepository customerRepository;
 	public final PetRepository petRepository;
+	public final ResponseBuilder responseBuilder;
 	
-	public CustomerServiceImp(CustomerRepository customerRepository,PetRepository petRepository) {
+	public CustomerServiceImp(CustomerRepository customerRepository,PetRepository petRepository,ResponseBuilder	responseBuilder) {
 		this.customerRepository=customerRepository;
 		this.petRepository=petRepository;
+		this.responseBuilder=responseBuilder;
 	}
 	
 	@Override
@@ -76,5 +83,15 @@ public class CustomerServiceImp implements CustomerService {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public ResponseEntity<ApiResponse> getCustomers() {
+		int page = 0;
+		int size = 10;
+		Pageable pageable = PageRequest.of(page, size);
+
+		Page<Customer> allCustomers = customerRepository.findAll(pageable);
+		return responseBuilder.buildResponse(HttpStatus.OK.value(),"All Customers", allCustomers);
 	}
 }

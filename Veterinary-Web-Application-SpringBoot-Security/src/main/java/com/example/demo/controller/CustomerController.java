@@ -9,9 +9,11 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.example.demo.dto.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -224,5 +226,10 @@ public class CustomerController {
 		return "customer/customers";
 	}
 
+	@GetMapping("/all")
+	@ResponseBody
+	public ResponseEntity<ApiResponse> getCustomer(){
+		return customerServiceImp.getCustomers();
+	}
 
 }

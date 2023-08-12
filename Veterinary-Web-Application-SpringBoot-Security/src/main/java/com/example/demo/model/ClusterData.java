@@ -13,5 +13,22 @@ import java.util.List;
 @AllArgsConstructor
 public class ClusterData {
     private int clusterNumber;
-    private List<Integer> appointmentHours;
+    private List<double[]> clusterPoints;
+
+    public int getClusterNumber() {
+        return clusterNumber;
+    }
+
+    public void setClusterNumber(int clusterNumber) {
+        this.clusterNumber = clusterNumber;
+    }
+
+    public List<double[]> getClusterPoints() {
+        return clusterPoints;
+    }
+
+    public void setClusterPoints(List<double[]> clusterPoints) {
+        this.clusterPoints = clusterPoints;
+    }
+
 }

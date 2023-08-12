@@ -84,35 +84,66 @@ public class AppointmentServiceImpl implements AppointmentService {
         return clusteredData;
     }
 
+//    public List<ClusterData> performKMeansClustering(List<Appointment> appointments) {
+//        List<DoublePoint> features = new ArrayList<>();
+//
+//        // Convert LocalDateTime to hour of the day for clustering
+//        for (Appointment appointment : appointments) {
+//            int hourOfDay = appointment.getDateTime().getHour();
+//            features.add(new DoublePoint((double) hourOfDay));
+//        }
+//
+//        int numClusters = 2; // Morning and afternoon
+//        DistanceMeasure distanceMeasure = new EuclideanDistance();
+//        Clusterer<DoublePoint> clusterer = new KMeansPlusPlusClusterer<>(numClusters, 1000, distanceMeasure);
+//        List<Cluster<DoublePoint>> clusters = (List<Cluster<DoublePoint>>) clusterer.cluster(features);
+//
+//        // Prepare clustered data for frontend
+//        List<ClusterData> clusteredData = new ArrayList<>();
+//        for (int i = 0; i < clusters.size(); i++) {
+//            ClusterData clusterData = new ClusterData();
+//            clusterData.setClusterNumber(i);
+//            List<Integer> appointmentHours = new ArrayList<>();
+//            for (DoublePoint point : clusters.get(i).getPoints()) {
+//                appointmentHours.add((int) point.getPoint()[0]);
+//            }
+//            clusterData.setAppointmentHours(appointmentHours);
+//            clusteredData.add(clusterData);
+//        }
+//
+//        return clusteredData;
+//    }
+
     public List<ClusterData> performKMeansClustering(List<Appointment> appointments) {
+
+
         List<DoublePoint> features = new ArrayList<>();
 
-        // Convert LocalDateTime to hour of the day for clustering
         for (Appointment appointment : appointments) {
-            int hourOfDay = appointment.getDateTime().getHour();
-            features.add(new DoublePoint((double) hourOfDay));
+            double[] feature = new double[2];
+            feature[0] = appointment.getDateTime().getDayOfWeek().getValue(); // Day of the week
+            feature[1] = appointment.getDateTime().getHour() + appointment.getDateTime().getMinute() / 60.0; // Time of the day
+            features.add(new DoublePoint(feature));
         }
 
-        int numClusters = 2; // Morning and afternoon
+        int numClusters = 2; // Number of clusters
         DistanceMeasure distanceMeasure = new EuclideanDistance();
         Clusterer<DoublePoint> clusterer = new KMeansPlusPlusClusterer<>(numClusters, 1000, distanceMeasure);
         List<Cluster<DoublePoint>> clusters = (List<Cluster<DoublePoint>>) clusterer.cluster(features);
 
-        // Prepare clustered data for frontend
         List<ClusterData> clusteredData = new ArrayList<>();
         for (int i = 0; i < clusters.size(); i++) {
             ClusterData clusterData = new ClusterData();
             clusterData.setClusterNumber(i);
-            List<Integer> appointmentHours = new ArrayList<>();
+            List<double[]> clusterPoints = new ArrayList<>();
             for (DoublePoint point : clusters.get(i).getPoints()) {
-                appointmentHours.add((int) point.getPoint()[0]);
+                clusterPoints.add(point.getPoint());
             }
-            clusterData.setAppointmentHours(appointmentHours);
+            clusterData.setClusterPoints(clusterPoints);
             clusteredData.add(clusterData);
         }
 
         return clusteredData;
     }
-
 
 }

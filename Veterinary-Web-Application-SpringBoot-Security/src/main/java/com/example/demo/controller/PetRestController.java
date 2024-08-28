@@ -21,21 +21,16 @@ import com.example.demo.repository.PetRepository;
 @RestController
 @RequestMapping("/rest")
 public class PetRestController {
-	@Autowired
-	CustomerRepository customerRepository;
-	
-	@Autowired
-	PetRepository petRepository;
-	
-	
-	@RequestMapping(value = "/pets/{customerid}", method = RequestMethod.GET)
-	public ResponseEntity<List<Pet>> findAllPets(@PathVariable int customerid, Map<String, Object> map) throws SQLException {
+    @Autowired CustomerRepository customerRepository;
 
-		Customer customer = customerRepository.findById(customerid).get();
-		List<Pet> pets = petRepository.findByCustomer(customer);
-		return  ResponseEntity.ok(pets);
+    @Autowired PetRepository petRepository;
 
-		
-	}
-	
+    @RequestMapping(value = "/pets/{customerid}", method = RequestMethod.GET)
+    public ResponseEntity<List<Pet>> findAllPets(
+            @PathVariable int customerid, Map<String, Object> map) throws SQLException {
+
+        Customer customer = customerRepository.findById(customerid).get();
+        List<Pet> pets = petRepository.findByCustomer(customer);
+        return ResponseEntity.ok(pets);
+    }
 }

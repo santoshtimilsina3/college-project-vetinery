@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Adoption Preferences</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div th:replace="fragments/header :: header"></div>
+        <div class="col-md-8 offset-md-2">
+            <h1>Set Your Adoption Preferences</h1>
+            <hr>
+            <form th:action="@{/preferences/update}" method="post">
+                <div class="form-group">
+                    <label for="preferredAnimalType">Preferred Animal Type</label>
+                    <select class="form-control" id="preferredAnimalType" name="preferredAnimalType" th:value="${preferences.preferredAnimalType}">
+                        <option value="DOG">Dog</option>
+                        <option value="CAT">Cat</option>
+                        <option value="BIRD">Bird</option>
+                        <option value="REPTILE">Reptile</option>
+                        <!-- Add other options as necessary -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="preferredAge">Preferred Age</label>
+                    <input type="number" class="form-control" id="preferredAge" name="preferredAge" th:value="${preferences.preferredAge}" />
+                </div>
+                <div class="form-group">
+                    <label for="preferredGender">Preferred Gender</label>
+                    <select class="form-control" id="preferredGender" name="preferredGender" th:value="${preferences.preferredGender}">
+                        <option value="MALE">Male</option>
+                        <option value="FEMALE">Female</option>
+                        <option value="ANY">Any</option>
+                    </select>
+                </div>
+                <!-- Add more preference fields as necessary -->
+                <button type="submit" class="btn btn-primary">Save Preferences</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/header :: jsfile"></div>
+</body>
+</html>

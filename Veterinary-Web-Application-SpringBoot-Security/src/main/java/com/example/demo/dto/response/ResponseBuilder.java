@@ -10,7 +10,11 @@ import java.util.Map;
 public class ResponseBuilder {
 
     public ResponseEntity<ApiResponse> buildResponse(
-            HttpHeaders httpHeaders, int httpStatusCode, String message, Object data, Map<String, Object> otherParams) {
+            HttpHeaders httpHeaders,
+            int httpStatusCode,
+            String message,
+            Object data,
+            Map<String, Object> otherParams) {
         return new ApiResponse.ApiResponseBuilder<>(httpStatusCode, message)
                 .withHttpHeaders(httpHeaders)
                 .withData(data)
@@ -42,7 +46,10 @@ public class ResponseBuilder {
     }
 
     public ResponseEntity<ApiResponse> buildResponse(
-            HttpHeaders httpHeaders, int httpStatusCode, String message, Map<String, Object> otherParams) {
+            HttpHeaders httpHeaders,
+            int httpStatusCode,
+            String message,
+            Map<String, Object> otherParams) {
         return new ApiResponse.ApiResponseBuilder<>(httpStatusCode, message)
                 .withHttpHeaders(httpHeaders)
                 .withOtherParams(otherParams)
@@ -58,8 +65,6 @@ public class ResponseBuilder {
 
     public ResponseEntity<ApiResponse> buildResponse(
             int httpStatusCode, String message, Object data) {
-        return new ApiResponse.ApiResponseBuilder<>(httpStatusCode, message)
-                .withData(data)
-                .build();
+        return new ApiResponse.ApiResponseBuilder<>(httpStatusCode, message).withData(data).build();
     }
 }

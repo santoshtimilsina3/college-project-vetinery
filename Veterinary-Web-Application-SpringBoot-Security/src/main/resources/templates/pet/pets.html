@@ -75,7 +75,9 @@
                     <th scope="col">Name</th>
                     <th scope="col">Age</th>
                     <th scope="col">Health Problem</th>
+                    <th scope="col">Adoptation Status</th>
                     <th scope="col">Actions</th>
+                    <th scope="col"> Change        Adoptation Status</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -85,6 +87,7 @@
                     <td th:text="${singlePet.getName()}"></td>
                     <td th:text="${singlePet.getAge()}"></td>
                     <td th:text="${singlePet.getProblem()}"></td>
+                    <td th:text="${singlePet.getAdoptionStatus()}"></td>
                     <td>
                         <button class="btn btn-primary btn-sm book-appointment-btn" data-toggle="modal"
                                 data-target="#bookAppointmentModal"
@@ -96,11 +99,22 @@
                                 th:attr="data-pet-id=${singlePet.getId()}">View Appointments
                         </button>
 
+                        <!-- Dropdown for Adoption Status -->
+
+                    </td>
+
                         <a th:href="@{'/pet/delete-pet/' + ${singlePet.getId()}}" class="btn btn-warning btn-sm"
                            onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
 
                     </td>
+                <td>
+                    <select class="form-control adoption-status" th:attr="data-pet-id=${singlePet.getId()}">
+                        <option value="AVAILABLE" th:selected="${singlePet.getAdoptionStatus()} == 'AVAILABLE'">AVAILABLE</option>
+                        <option value="ADOPTED" th:selected="${singlePet.getAdoptionStatus()} == 'ADOPTED'">ADOPTED</option>
+                    </select>
+                </td>
                 </tr>
+
                 </tbody>
             </table>
             <hr>
@@ -309,7 +323,43 @@
 
 
         })
+
+
+        $(".adoption-status").change(function () {
+            var newStatus = $(this).val();
+            console.log(newStatus);  // Log the new status
+            var petId = $(this).data("pet-id");
+
+            // Send a request to update the adoption status using GET
+            fetch(`/api/pet/${petId}/changeAdoptionStatus?status=${newStatus}`, {
+                method: 'GET'  // Change to GET method
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();  // Adjusted to handle plain text response
+                })
+                .then(data => {
+                    alert("Adoption status updated successfully!");
+                    window.location.reload(); // Refresh the page to show updated status
+                })
+                .catch(error => {
+                    console.error("Error updating adoption status:", error);
+                    alert("Failed to update adoption status. Please try again.");
+                });
+        });
+
+
     });
+
+        // Handle Adoption Status Change
+
+
+    // Handle Adoption Status Change
+
+
+
 </script>
 </html>
 

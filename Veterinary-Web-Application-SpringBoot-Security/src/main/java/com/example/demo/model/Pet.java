@@ -3,6 +3,7 @@ package com.example.demo.model;
 import javax.persistence.*;
 
 import com.example.demo.enums.Animals;
+import com.example.demo.util.AdoptionStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
@@ -10,88 +11,119 @@ import java.util.List;
 @Entity
 @Table(name = "pet")
 public class Pet {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	@Column(name="animal_type")
-	@Enumerated(EnumType.STRING)
-	private Animals type;
-	
-	@Column(name = "name")
-	private String name;
+    @Column(name = "animal_type")
+    @Enumerated(EnumType.STRING)
+    private Animals type;
 
-	@Column(name = "problem")
-	private String problem;
-	@Column(name = "age")
-	private Long age;
+    @Column(name = "name")
+    private String name;
 
-	public Long getAge() {
-		return age;
-	}
+    @Column(name = "problem")
+    private String problem;
 
-	public void setAge(Long age) {
-		this.age = age;
-	}
+    @Column(name = "age")
+    private Long age;
 
-	@JsonIgnore
+    @Enumerated(EnumType.STRING)
+    @Column(name = "adoption_status")
+    private AdoptionStatus adoptionStatus;
+
+    @Column(name = "size")
+    private String size;
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getBreed() {
+        return breed;
+    }
+
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
+
+    @Column(name = "breed")
+    private String breed;
+
+    public AdoptionStatus getAdoptionStatus() {
+        return adoptionStatus;
+    }
+
+    public void setAdoptionStatus(AdoptionStatus adoptionStatus) {
+        this.adoptionStatus = adoptionStatus;
+    }
+
+    public Long getAge() {
+        return age;
+    }
+
+    public void setAge(Long age) {
+        this.age = age;
+    }
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerid")
-	public Customer customer;
+    public Customer customer;
 
-	
-	public Pet() {
-		super();
-	}
+    public Pet() {
+        super();
+    }
 
-	public Pet(Animals type, String name, String problem, Customer customer) {
-		super();
-		this.type = type;
-		this.name = name;
-		this.problem = problem;
-		this.customer = customer;
-	}
+    public Pet(Animals type, String name, String problem, Customer customer) {
+        super();
+        this.type = type;
+        this.name = name;
+        this.problem = problem;
+        this.customer = customer;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public Animals getType() {
+        return type;
+    }
 
-	public Animals getType() {
-		return type;
-	}
+    public void setType(Animals type) {
+        this.type = type;
+    }
 
-	public void setType(Animals type) {
-		this.type = type;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getProblem() {
+        return problem;
+    }
 
-	public String getProblem() {
-		return problem;
-	}
+    public void setProblem(String problem) {
+        this.problem = problem;
+    }
 
-	public void setProblem(String problem) {
-		this.problem = problem;
-	}
+    public Customer getCustomer() {
+        return customer;
+    }
 
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-	
-	
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 }

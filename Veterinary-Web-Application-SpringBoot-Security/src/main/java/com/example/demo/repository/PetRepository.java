@@ -1,4 +1,4 @@
- package com.example.demo.repository;
+package com.example.demo.repository;
 
 import java.util.List;
 
@@ -11,8 +11,9 @@ import com.example.demo.model.Pet;
 @Repository
 public interface PetRepository extends JpaRepository<Pet, Long> {
 
-	List<Pet> findByCustomer(Customer customer);
-	List<Pet> findByType(String type);
-	List<Pet> findByName(String name);
+    List<Pet> findByCustomer(Customer customer);
 
+    List<Pet> findByType(String type);
+
+    List<Pet> findByName(String name);
 }

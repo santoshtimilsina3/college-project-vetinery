@@ -37,199 +37,206 @@ import com.example.demo.util.ApiPaths;
 @RequestMapping(ApiPaths.CustomerBasicCtrl.CTRL)
 public class CustomerController {
 
-	@Autowired
-	PetRepository petRepository;
-	@Autowired
-	CustomerServiceImp  customerServiceImp;
-	
-	@ResponseBody
-	@GetMapping()
-	public String hello() {
-		
-		return "hello customer";
-	}
-	
-	
-	@RequestMapping(value = "/customers", method = RequestMethod.GET)
-	public String getAllCustomers(Map<String, Object> map) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		List<Customer> customers = customerServiceImp.findAll();
-		map.put("title", "Customers");
-		map.put("adminname", auth.getName());
-		map.put("customers", customers);
-		return "customer/customers";
-	}
-	
-	//http://localhost:8182/customer/customers-page?page=1&size=3
-	@ResponseBody
-	@RequestMapping(value = "/customers-page", method = RequestMethod.GET)
-	public String getAllCustomersPage(Map<String, Object> map,
-								      @RequestParam("page") Optional<Integer> page, 
-								      @RequestParam("size") Optional<Integer> size) {
+    @Autowired PetRepository petRepository;
+    @Autowired CustomerServiceImp customerServiceImp;
+
+    @ResponseBody
+    @GetMapping()
+    public String hello() {
+
+        return "hello customer";
+    }
+
+    @RequestMapping(value = "/customers", method = RequestMethod.GET)
+    public String getAllCustomers(Map<String, Object> map) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<Customer> customers = customerServiceImp.findAll();
+        map.put("title", "Customers");
+        map.put("adminname", auth.getName());
+        map.put("customers", customers);
+        return "customer/customers";
+    }
+
+    // http://localhost:8182/customer/customers-page?page=1&size=3
+    @ResponseBody
+    @RequestMapping(value = "/customers-page", method = RequestMethod.GET)
+    public String getAllCustomersPage(
+            Map<String, Object> map,
+            @RequestParam("page") Optional<Integer> page,
+            @RequestParam("size") Optional<Integer> size) {
         int currentPage = page.orElse(0);
         int pageSize = size.orElse(5);
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Page<Customer> customers = customerServiceImp.GetAllPagination(PageRequest.of(currentPage - 1, pageSize));
-		map.put("title", "Customers");
-		map.put("adminname", auth.getName());
-		map.put("customers", customers);
-		customers.getContent().forEach(aa->{
-			System.out.println(aa.getCustomerid()+" "+aa.getEmail());
-		});
-		return "currentPage : "+currentPage +" <br>"
-				+"pageSize : "+ pageSize +" <br>";
-	}
-	
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Page<Customer> customers =
+                customerServiceImp.GetAllPagination(PageRequest.of(currentPage - 1, pageSize));
+        map.put("title", "Customers");
+        map.put("adminname", auth.getName());
+        map.put("customers", customers);
+        customers
+                .getContent()
+                .forEach(
+                        aa -> {
+                            System.out.println(aa.getCustomerid() + " " + aa.getEmail());
+                        });
+        return "currentPage : " + currentPage + " <br>" + "pageSize : " + pageSize + " <br>";
+    }
 
-	@RequestMapping(value = "/get-customers", method = RequestMethod.GET)
-	public String getAnyCustomers(@RequestParam("name") String name,Map<String, Object> map) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		map.put("title", "Customers");
-		map.put("adminname", auth.getName());
-		List<Customer> customers=null;
-		customers = customerServiceImp.findByFirstname(name);
-		
-		//control whether there is any customer having this firstname called name
-		if(customers.size()>0) {
-			map.put("customers", customers);
-		}else {
-			//control whether there is any customer having this lastname called name
-			customers = customerServiceImp.findByLastname(name);
-			if(customers.size()>0) {
-				map.put("customers", customers);
-			}else {
-				customers = customerServiceImp.findAll();
-				map.put("customers", customers);
-				map.put("message", " No records found.");
-			}
-		}
-		return "customer/customers";
-	}
-	
-	@RequestMapping(value = "/insert-customer", method = RequestMethod.GET)
-	public String CustomerRegisterPanel(Map<String, Object> map) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		map.put("title", "Customer Addition Section");
-		map.put("adminname", auth.getName());
-		map.put("customer", new Customer());
-		map.put("citys", new ArrayList<Citys>(Arrays.asList(Citys.values())));
-		return "customer/customer-insert-panel";
-	}
+    @RequestMapping(value = "/get-customers", method = RequestMethod.GET)
+    public String getAnyCustomers(@RequestParam("name") String name, Map<String, Object> map) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("title", "Customers");
+        map.put("adminname", auth.getName());
+        List<Customer> customers = null;
+        customers = customerServiceImp.findByFirstname(name);
 
-	@RequestMapping(value = "/insert-customer", method = RequestMethod.POST)
-	public String saveRegisterPage(@Valid @ModelAttribute("customer") Customer customer, BindingResult result,
-			Model model, Map<String, Object> map) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		map.put("adminname", auth.getName());
-		map.put("customer", new Customer());
-		map.put("title", "Customer Addition Section");
-		if (result.hasErrors()) {
-			return "customer-insert-panel";
-		} else {
-			Boolean control=customerServiceImp.save(customer);
-			if(control==false) {
-				map.put("message", "An Issue Occurred.");
-			}else {
-				map.put("message", "Registration process successful");
-			}
-		}
+        // control whether there is any customer having this firstname called name
+        if (customers.size() > 0) {
+            map.put("customers", customers);
+        } else {
+            // control whether there is any customer having this lastname called name
+            customers = customerServiceImp.findByLastname(name);
+            if (customers.size() > 0) {
+                map.put("customers", customers);
+            } else {
+                customers = customerServiceImp.findAll();
+                map.put("customers", customers);
+                map.put("message", " No records found.");
+            }
+        }
+        return "customer/customers";
+    }
 
-		return "customer/customer-insert-panel";
-	}
+    @RequestMapping(value = "/insert-customer", method = RequestMethod.GET)
+    public String CustomerRegisterPanel(Map<String, Object> map) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("title", "Customer Addition Section");
+        map.put("adminname", auth.getName());
+        map.put("customer", new Customer());
+        map.put("citys", new ArrayList<Citys>(Arrays.asList(Citys.values())));
+        return "customer/customer-insert-panel";
+    }
 
-	@RequestMapping(value = "/show-customer/{customerid}", method = RequestMethod.GET)
-	public String CustomerShowPanel(@PathVariable int customerid, Map<String, Object> map) throws SQLException {
+    @RequestMapping(value = "/insert-customer", method = RequestMethod.POST)
+    public String saveRegisterPage(
+            @Valid @ModelAttribute("customer") Customer customer,
+            BindingResult result,
+            Model model,
+            Map<String, Object> map) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("adminname", auth.getName());
+        map.put("customer", new Customer());
+        map.put("title", "Customer Addition Section");
+        if (result.hasErrors()) {
+            return "customer-insert-panel";
+        } else {
+            Boolean control = customerServiceImp.save(customer);
+            if (control == false) {
+                map.put("message", "An Issue Occurred.");
+            } else {
+                map.put("message", "Registration process successful");
+            }
+        }
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		map.put("adminname", auth.getName());
+        return "customer/customer-insert-panel";
+    }
 
-		Optional<Customer> customer = customerServiceImp.findById(customerid);
-		if(customer.isPresent()) {
-			map.put("title", "Customer Details");
-			map.put("customer", customer.get());
+    @RequestMapping(value = "/show-customer/{customerid}", method = RequestMethod.GET)
+    public String CustomerShowPanel(@PathVariable int customerid, Map<String, Object> map)
+            throws SQLException {
 
-			return "customer/show-customer";
-		}else {
-			List<Customer> customers = customerServiceImp.findAll();
-			map.put("title", "Customers");
-			map.put("customers", customers);
-			map.put("message", " No records found.");
-			return "customer/customers";
-		}
-	}
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("adminname", auth.getName());
 
-	@RequestMapping(value = "/update-customer/{customerid}", method = RequestMethod.GET)
-	public String CustomerUpdatePanel(@PathVariable int customerid, Map<String, Object> map)  throws SQLException {
+        Optional<Customer> customer = customerServiceImp.findById(customerid);
+        if (customer.isPresent()) {
+            map.put("title", "Customer Details");
+            map.put("customer", customer.get());
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		map.put("adminname", auth.getName());
+            return "customer/show-customer";
+        } else {
+            List<Customer> customers = customerServiceImp.findAll();
+            map.put("title", "Customers");
+            map.put("customers", customers);
+            map.put("message", " No records found.");
+            return "customer/customers";
+        }
+    }
 
-		Optional<Customer> customer = customerServiceImp.findById(customerid);
-		if(customer.isPresent()) {
-			map.put("title", "Customer Update Section");
-			map.put("customer", customer.get());
-			map.put("citys", new ArrayList<Citys>(Arrays.asList(Citys.values())));
-			return "customer/customer-update-panel";
-		}else {
-			List<Customer> customers = customerServiceImp.findAll();
-			map.put("title", "Customers");
-			map.put("customers", customers);
-			map.put("message", " No records found.");
-			return "customer/customers";
-		}
+    @RequestMapping(value = "/update-customer/{customerid}", method = RequestMethod.GET)
+    public String CustomerUpdatePanel(@PathVariable int customerid, Map<String, Object> map)
+            throws SQLException {
 
-	}
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("adminname", auth.getName());
 
-	@RequestMapping(value = "/update-customer", method = RequestMethod.POST)
-	public String CustomerUpdate(@Valid @ModelAttribute("customer") Customer customer, BindingResult result,
-			Map<String, Object> map)  throws SQLException {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		map.put("adminname", auth.getName());
-		map.put("customer", new Customer());
-		if (result.hasErrors()) {
-			map.put("title", "Add Customer");
-			return "customer-insert-panel";
-		} else {
-			Boolean control=customerServiceImp.save(customer);
-			if(control==false) {
-				map.put("message", "An Issue Occurred.");
-			}else {
-				map.put("message", " Record update process is successful.");
-			}
-		}
-		List<Customer> customers = customerServiceImp.findAll();
-		map.put("title", "Customers");
-		map.put("adminname", auth.getName());
-		map.put("customers", customers);
-		return "customer/customers";
-	}
-	@RequestMapping(value = "/delete-customer/{customerid}", method = RequestMethod.GET)
-	public String CustomerDelete(@PathVariable int customerid, Map<String, Object> map) throws SQLException {
-		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		map.put("adminname", auth.getName());
-		Optional<Customer> customer = customerServiceImp.findById(customerid);
-		if(customer.isPresent()) {
-			Boolean control=customerServiceImp.delete(customer.get());
-			if(control == true) {
-				map.put("message", "Record has been deleted.");
-			}else {
-				map.put("message", " Customer Update Section");
-			}
-		}else {
-			map.put("message", " No records found.");
-			
-		}
-		List<Customer> customers = customerServiceImp.findAll();
-		map.put("title", "Customers");
-		map.put("customers", customers);
-		return "customer/customers";
-	}
+        Optional<Customer> customer = customerServiceImp.findById(customerid);
+        if (customer.isPresent()) {
+            map.put("title", "Customer Update Section");
+            map.put("customer", customer.get());
+            map.put("citys", new ArrayList<Citys>(Arrays.asList(Citys.values())));
+            return "customer/customer-update-panel";
+        } else {
+            List<Customer> customers = customerServiceImp.findAll();
+            map.put("title", "Customers");
+            map.put("customers", customers);
+            map.put("message", " No records found.");
+            return "customer/customers";
+        }
+    }
 
-	@GetMapping("/all")
-	@ResponseBody
-	public ResponseEntity<ApiResponse> getCustomer(){
-		return customerServiceImp.getCustomers();
-	}
+    @RequestMapping(value = "/update-customer", method = RequestMethod.POST)
+    public String CustomerUpdate(
+            @Valid @ModelAttribute("customer") Customer customer,
+            BindingResult result,
+            Map<String, Object> map)
+            throws SQLException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("adminname", auth.getName());
+        map.put("customer", new Customer());
+        if (result.hasErrors()) {
+            map.put("title", "Add Customer");
+            return "customer-insert-panel";
+        } else {
+            Boolean control = customerServiceImp.save(customer);
+            if (control == false) {
+                map.put("message", "An Issue Occurred.");
+            } else {
+                map.put("message", " Record update process is successful.");
+            }
+        }
+        List<Customer> customers = customerServiceImp.findAll();
+        map.put("title", "Customers");
+        map.put("adminname", auth.getName());
+        map.put("customers", customers);
+        return "customer/customers";
+    }
 
+    @RequestMapping(value = "/delete-customer/{customerid}", method = RequestMethod.GET)
+    public String CustomerDelete(@PathVariable int customerid, Map<String, Object> map)
+            throws SQLException {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("adminname", auth.getName());
+        Optional<Customer> customer = customerServiceImp.findById(customerid);
+        if (customer.isPresent()) {
+            Boolean control = customerServiceImp.delete(customer.get());
+            if (control == true) {
+                map.put("message", "Record has been deleted.");
+            } else {
+                map.put("message", " Customer Update Section");
+            }
+        } else {
+            map.put("message", " No records found.");
+        }
+        List<Customer> customers = customerServiceImp.findAll();
+        map.put("title", "Customers");
+        map.put("customers", customers);
+        return "customer/customers";
+    }
+
+    @GetMapping("/all")
+    @ResponseBody
+    public ResponseEntity<ApiResponse> getCustomer() {
+        return customerServiceImp.getCustomers();
+    }
 }

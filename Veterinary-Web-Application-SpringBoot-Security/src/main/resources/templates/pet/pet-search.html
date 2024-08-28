@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Pet Search</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <!-- Include header fragment -->
+        <div lang="en" th:replace="fragments/header :: header"></div>
+        <div lang="en" th:replace="fragments/header :: title"></div>
+
+        <!-- Search Form Section -->
+        <div class="col-md-12">
+            <h1 class="h3 mb-3 font-weight-normal"><span class="badge badge-info">Pet Search Section</span></h1>
+            <form id="searchForm" autocomplete="off" method="get" th:action="@{/pet/search}">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="query">Keywords</label>
+                        <input type="text" class="form-control" id="query" name="query"
+                               placeholder="Enter keywords (e.g., breed, type)">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="ageRange">Age Range</label>
+                        <select class="form-control" id="ageRange" name="ageRange">
+                            <option value="all">All</option>
+                            <option value="puppy">Puppy</option>
+                            <option value="adult">Adult</option>
+                            <option value="senior">Senior</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="size">Size</label>
+                        <select class="form-control" id="size" name="size">
+                            <option value="all">All</option>
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+
+        <!-- Search Results Section -->
+        <div class="col-md-12 mt-4" id="searchResults">
+            <h2 class="h4">Search Results</h2>
+            <div class="row">
+                <div class="col-md-4" th:each="pet : ${pets}">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" th:src="@{${pet.imageUrl}}" alt="Pet image">
+                        <div class="card-body">
+                            <h5 class="card-title"><span class="badge badge-primary">Pet Information</span></h5>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item" th:text="${pet.name}"></li>
+                            <li class="list-group-item" th:text="'Breed: ' + ${pet.breed}"></li>
+                            <li class="list-group-item" th:text="'Age: ' + ${pet.age} + ' years'"></li>
+                            <li class="list-group-item" th:text="'Size: ' + ${pet.size}"></li>
+                        </ul>
+                        <div class="card-body">
+                            <a th:href="@{'/pet/details/' + ${pet.id}}" class="btn btn-info btn-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include JavaScript files -->
+<div lang="en" th:replace="fragments/header :: jsfile"></div>
+</body>
+</html>
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Pet Search</title>-->
+<!--</head>-->
+<!--<style>-->
+<!--    body {-->
+<!--        font-family: Arial, sans-serif;-->
+<!--        background-color: #f4f4f4;-->
+<!--        margin: 0;-->
+<!--        padding: 20px;-->
+<!--    }-->
+
+<!--    .container {-->
+<!--        width: 80%;-->
+<!--        margin: 0 auto;-->
+<!--    }-->
+
+<!--    h1 {-->
+<!--        text-align: center;-->
+<!--    }-->
+
+<!--    .search-bar, .filters {-->
+<!--        margin-bottom: 20px;-->
+<!--        text-align: center;-->
+<!--    }-->
+
+<!--    input, select {-->
+<!--        padding: 10px;-->
+<!--        margin: 5px;-->
+<!--    }-->
+
+<!--    .results {-->
+<!--        margin-top: 20px;-->
+<!--        padding: 10px;-->
+<!--        border: 1px solid #ddd;-->
+<!--        background-color: #fff;-->
+<!--    }-->
+
+<!--</style>-->
+<!--<body>-->
+<!--    <div class="container">-->
+<!--        <h1>Find Your Perfect Pet</h1>-->
+<!--        <div class="search-bar">-->
+<!--            <input type="text" id="search-input" placeholder="Search by pet name, breed, or type">-->
+<!--            <button id="search-button">Search</button>-->
+<!--        </div>-->
+<!--        <div class="filters">-->
+<!--            <label for="age-range">Age Range:</label>-->
+<!--            <select id="age-range">-->
+<!--                <option value="all">All Ages</option>-->
+<!--                <option value="puppy">Puppy/Kitten</option>-->
+<!--                <option value="adult">Adult</option>-->
+<!--                <option value="senior">Senior</option>-->
+<!--            </select>-->
+
+<!--            <label for="size">Size:</label>-->
+<!--            <select id="size">-->
+<!--                <option value="all">All Sizes</option>-->
+<!--                <option value="small">Small</option>-->
+<!--                <option value="medium">Medium</option>-->
+<!--                <option value="large">Large</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--        <div class="results" id="results"></div>-->
+<!--    </div>-->
+
+<!--    <script >-->
+<!--        document.getElementById('search-button').addEventListener('click', function () {-->
+<!--            var query = document.getElementById('search-input').value;-->
+<!--            var ageRange = document.getElementById('age-range').value;-->
+<!--            var size = document.getElementById('size').value;-->
+
+<!--            // Construct the search URL with query parameters-->
+<!--            var searchUrl = `/api/pets/search?query=${query}&ageRange=${ageRange}&size=${size}`;-->
+
+<!--            // Fetch the search results from the server-->
+<!--            fetch(searchUrl)-->
+<!--                .then(response => {-->
+<!--                    if (!response.ok) {-->
+<!--                        throw new Error('Network response was not ok');-->
+<!--                    }-->
+<!--                    return response.json();-->
+<!--                })-->
+<!--                .then(data => {-->
+<!--                    displayResults(data);-->
+<!--                })-->
+<!--                .catch(error => {-->
+<!--                    console.error('Error fetching search results:', error);-->
+<!--                    alert('Failed to fetch search results. Please try again.');-->
+<!--                });-->
+<!--        });-->
+
+<!--        function displayResults(pets) {-->
+<!--            var resultsDiv = document.getElementById('results');-->
+<!--            resultsDiv.innerHTML = ''; // Clear previous results-->
+
+<!--            if (pets.length === 0) {-->
+<!--                resultsDiv.innerHTML = '<p>No pets found. Try adjusting your search criteria.</p>';-->
+<!--                return;-->
+<!--            }-->
+
+<!--            pets.forEach(pet => {-->
+<!--                var petDiv = document.createElement('div');-->
+<!--                petDiv.className = 'pet-result';-->
+<!--                petDiv.innerHTML = `-->
+<!--            <h3>${pet.name}</h3>-->
+<!--            <p>Breed: ${pet.breed}</p>-->
+<!--            <p>Age: ${pet.age}</p>-->
+<!--            <p>Size: ${pet.size}</p>-->
+<!--            <p>Status: ${pet.adoptionStatus}</p>-->
+<!--        `;-->
+<!--                resultsDiv.appendChild(petDiv);-->
+<!--            });-->
+<!--        }-->
+
+<!--    </script>-->
+<!--</body>-->
+<!--</html>-->

@@ -34,174 +34,178 @@ import com.example.demo.util.ApiPaths;
 @RequestMapping(ApiPaths.UserBasicCtrl.CTRL)
 public class UserController {
 
-	public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/static/img/";
-	
-	private UserRepository userRepository;
-	
-	private BCryptPasswordEncoder passwordEncoder;
-	
-	public UserController(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
-		super();
-		this.userRepository = userRepository;
-		this.passwordEncoder = passwordEncoder;
-	}
+    public static String uploadDirectory =
+            System.getProperty("user.dir") + "/src/main/resources/static/img/";
 
-	@RequestMapping(value = "/show-user/{email}/", method = RequestMethod.GET)
-	public String UserShowPanel(@PathVariable String email, Map<String, Object> map) throws SQLException {
+    private UserRepository userRepository;
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		map.put("adminname", auth.getName());
-		map.put("title", "Doktor Detayları");
-		List<User> users=userRepository.getUserByEmail(email);
-		if(users.size()>0) {
-			if(auth.getName().equals(users.get(0).getEmail())) {
-				map.put("user", users.get(0));
-			}else {
-				map.put("message", email+" email adresi size ait değildir.");
-			}
-		}else {
-			map.put("message", email+" email adresine ait kayıt bulunamamıştır..");
-		}
-		return "user/user-details";
-	}
-	
-	@RequestMapping(value = "/update-user/{email}/", method = RequestMethod.GET)
-	public String UserUpdatePanel(@PathVariable String email, Map<String, Object> map) throws SQLException {
+    private BCryptPasswordEncoder passwordEncoder;
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		map.put("adminname", auth.getName());
-		map.put("title", "Doktor Kayıt Güncelleme Sayfası");
-		
-		List<User> users=userRepository.getUserByEmail(email);
-		if(users.size()>0) {
-			if(auth.getName().equals(users.get(0).getEmail())) {
-				map.put("user", users.get(0));
-				map.put("citys", new ArrayList<Citys>(Arrays.asList(Citys.values())));
-				return "user/user-update-panel";
-			}else {
-				map.put("message", email+" email adresi size ait değildir.");
-			}
-		}else {
-			
-			map.put("message", email+" email adresine ait kayıt bulunamamıştır..");
-		}
-		return "user/user-details";
-	}
-	
-	@RequestMapping(value = "/update-user/", method = RequestMethod.POST)
-	public String UserUpdate(@Valid @ModelAttribute("user") User user, BindingResult result,
-			Map<String, Object> map)  throws SQLException {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		map.put("adminname", auth.getName());
-		map.put("title", "Doktor Kayıt Güncelleme Sayfası");
-		
-		List<User> users=userRepository.getUserByEmail(auth.getName());
-		if(auth.getName().equals(users.get(0).getEmail())) {
+    public UserController(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+        super();
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-			if (result.hasErrors()) {
-				map.put("message", "Kayıt işlmei başarısız..");
-				return "user/user-details";
-			}
-			user.setImage(users.get(0).getImage());
-			user.setReel_password(users.get(0).getReel_password());
-			user.setPassword(users.get(0).getPassword());
-			map.put("message", "Kayıt işlemi başarılı. Tekrar giriş yapınız.");
-			userRepository.save(user);
-			return "redirect:/logout";
-		}else {
-			map.put("message", users.get(0).getEmail()+" email adresi size ait değildir.");
-		}
+    @RequestMapping(value = "/show-user/{email}/", method = RequestMethod.GET)
+    public String UserShowPanel(@PathVariable String email, Map<String, Object> map)
+            throws SQLException {
 
-		return "user/user-details";
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("adminname", auth.getName());
+        map.put("title", "Doktor Detayları");
+        List<User> users = userRepository.getUserByEmail(email);
+        if (users.size() > 0) {
+            if (auth.getName().equals(users.get(0).getEmail())) {
+                map.put("user", users.get(0));
+            } else {
+                map.put("message", email + " email adresi size ait değildir.");
+            }
+        } else {
+            map.put("message", email + " email adresine ait kayıt bulunamamıştır..");
+        }
+        return "user/user-details";
+    }
 
-	}
-	
-	
-	@RequestMapping(value = "/update-user-password/{email}/", method = RequestMethod.GET)
-	public String UserPasswordUpdatePanel(@PathVariable String email, Map<String, Object> map) throws SQLException {
+    @RequestMapping(value = "/update-user/{email}/", method = RequestMethod.GET)
+    public String UserUpdatePanel(@PathVariable String email, Map<String, Object> map)
+            throws SQLException {
 
-		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		map.put("adminname", auth.getName());
-		map.put("title", "Doktor Detayları");
-		List<User> users=userRepository.getUserByEmail(email);
-		if(users.size()>0) {
-			if(auth.getName().equals(users.get(0).getEmail())) {
-				map.put("message", email+" Hoşgeldiniz.");
-				map.put("user", users.get(0));
-				return "user/user-password-update-panel";
-			}else {
-				map.put("message", email+" email adresi size ait değildir.");
-			}
-		}else {
-			map.put("message", email+" email adresine ait kayıt bulunamamıştır..");
-		}
-		return "user/user-details";
-	}
-	
-	@RequestMapping(value = "/update-user-password", method = RequestMethod.POST)
-	public String UserPasswordUpdate(Map<String, Object> map,WebRequest request) throws SQLException {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		List<User> users=userRepository.getUserByEmail(auth.getName());
-		map.put("user", users.get(0));
-		map.put("adminname", auth.getName());
-		map.put("title", "Doktor Detayları");
-		if(request.getParameter("oldpassword1").equals(request.getParameter("oldpassword2"))){
-			boolean control=passwordEncoder.matches( request.getParameter("oldpassword1"),users.get(0).getPassword());
-			if(control) {
-				//changing password
-				users.get(0).setReel_password(request.getParameter("password"));
-				users.get(0).setPassword(passwordEncoder.encode(request.getParameter("password")));
-				userRepository.save(users.get(0));
-				map.put("message", " Şifreniz başarıyla güncellenmiştir..");
-				return "redirect:/logout";
-			}else {
-				map.put("message", "Mevcut şifrenizi yanlış girdiniz.");
-			}
-		}else {
-			map.put("message", "Mevcut şifreler uyuşmuyor.");
-		}
-		return "user/user-details";
-	}
-	
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("adminname", auth.getName());
+        map.put("title", "ABC VET	");
 
-	
-	
-	 @RequestMapping(value="/upload-image/{email}/",method=RequestMethod.POST)
-	  public String upload(@PathVariable String email, Map<String, Object> map, @RequestParam("files") MultipartFile[] files) {
-		 
+        List<User> users = userRepository.getUserByEmail(email);
+        if (users.size() > 0) {
+            if (auth.getName().equals(users.get(0).getEmail())) {
+                map.put("user", users.get(0));
+                map.put("citys", new ArrayList<Citys>(Arrays.asList(Citys.values())));
+                return "user/user-update-panel";
+            } else {
+                map.put("message", email + " email adresi size ait değildir.");
+            }
+        } else {
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		map.put("adminname", auth.getName());
-		map.put("title", "Doktor Detayları");
-		List<User> users=userRepository.getUserByEmail(email);
-		if(users.size()>0) {
-			if(auth.getName().equals(users.get(0).getEmail())) {
-				// upload image
-				StringBuilder fileNames = new StringBuilder();
-				for (MultipartFile file : files) {
-					Path fileNameAndPath = Paths.get(uploadDirectory, file.getOriginalFilename());
-					fileNames.append(file.getOriginalFilename()+" ");
-					//fileNames.toString().replace(" ", "_");
-					users.get(0).setImage(fileNames.toString());
-					userRepository.save(users.get(0));
-					try {
-						Files.write(fileNameAndPath, file.getBytes());
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				map.put("message", email+" Hoşgeldiniz.");
-				//map.put("message_2", "Successfully uploaded files "+fileNames.toString());
-				map.put("message_2", "Resminiz Başarıyla Yüklenmiştir.");
-				map.put("user", users.get(0));
-			}else {
-				map.put("message", email+" email adresi size ait değildir.");
-			}
-		}else {
-			
-			map.put("message", email+" email adresine ait kayıt bulunamamıştır..");
-		}
-		return "user/user-details";
-	}
+            map.put("message", email + " email adresine ait kayıt bulunamamıştır..");
+        }
+        return "user/user-details";
+    }
+
+    @RequestMapping(value = "/update-user/", method = RequestMethod.POST)
+    public String UserUpdate(
+            @Valid @ModelAttribute("user") User user, BindingResult result, Map<String, Object> map)
+            throws SQLException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("adminname", auth.getName());
+        map.put("title", "Doktor Kayıt Güncelleme Sayfası");
+
+        List<User> users = userRepository.getUserByEmail(auth.getName());
+        if (auth.getName().equals(users.get(0).getEmail())) {
+
+            if (result.hasErrors()) {
+                map.put("message", "Kayıt işlmei başarısız..");
+                return "user/user-details";
+            }
+            user.setImage(users.get(0).getImage());
+            user.setReel_password(users.get(0).getReel_password());
+            user.setPassword(users.get(0).getPassword());
+            map.put("message", "Kayıt işlemi başarılı. Tekrar giriş yapınız.");
+            userRepository.save(user);
+            return "redirect:/logout";
+        } else {
+            map.put("message", users.get(0).getEmail() + " email adresi size ait değildir.");
+        }
+
+        return "user/user-details";
+    }
+
+    @RequestMapping(value = "/update-user-password/{email}/", method = RequestMethod.GET)
+    public String UserPasswordUpdatePanel(@PathVariable String email, Map<String, Object> map)
+            throws SQLException {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("adminname", auth.getName());
+        map.put("title", "Doktor Detayları");
+        List<User> users = userRepository.getUserByEmail(email);
+        if (users.size() > 0) {
+            if (auth.getName().equals(users.get(0).getEmail())) {
+                map.put("message", email + " Hoşgeldiniz.");
+                map.put("user", users.get(0));
+                return "user/user-password-update-panel";
+            } else {
+                map.put("message", email + " email adresi size ait değildir.");
+            }
+        } else {
+            map.put("message", email + " email adresine ait kayıt bulunamamıştır..");
+        }
+        return "user/user-details";
+    }
+
+    @RequestMapping(value = "/update-user-password", method = RequestMethod.POST)
+    public String UserPasswordUpdate(Map<String, Object> map, WebRequest request)
+            throws SQLException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<User> users = userRepository.getUserByEmail(auth.getName());
+        map.put("user", users.get(0));
+        map.put("adminname", auth.getName());
+        map.put("title", "Doktor Detayları");
+        if (request.getParameter("oldpassword1").equals(request.getParameter("oldpassword2"))) {
+            boolean control =
+                    passwordEncoder.matches(
+                            request.getParameter("oldpassword1"), users.get(0).getPassword());
+            if (control) {
+                // changing password
+                users.get(0).setReel_password(request.getParameter("password"));
+                users.get(0).setPassword(passwordEncoder.encode(request.getParameter("password")));
+                userRepository.save(users.get(0));
+                map.put("message", " Şifreniz başarıyla güncellenmiştir..");
+                return "redirect:/logout";
+            } else {
+                map.put("message", "Mevcut şifrenizi yanlış girdiniz.");
+            }
+        } else {
+            map.put("message", "Mevcut şifreler uyuşmuyor.");
+        }
+        return "user/user-details";
+    }
+
+    @RequestMapping(value = "/upload-image/{email}/", method = RequestMethod.POST)
+    public String upload(
+            @PathVariable String email,
+            Map<String, Object> map,
+            @RequestParam("files") MultipartFile[] files) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("adminname", auth.getName());
+        map.put("title", "Doktor Detayları");
+        List<User> users = userRepository.getUserByEmail(email);
+        if (users.size() > 0) {
+            if (auth.getName().equals(users.get(0).getEmail())) {
+                // upload image
+                StringBuilder fileNames = new StringBuilder();
+                for (MultipartFile file : files) {
+                    Path fileNameAndPath = Paths.get(uploadDirectory, file.getOriginalFilename());
+                    fileNames.append(file.getOriginalFilename() + " ");
+                    // fileNames.toString().replace(" ", "_");
+                    users.get(0).setImage(fileNames.toString());
+                    userRepository.save(users.get(0));
+                    try {
+                        Files.write(fileNameAndPath, file.getBytes());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                map.put("message", email + " Hoşgeldiniz.");
+                // map.put("message_2", "Successfully uploaded files "+fileNames.toString());
+                map.put("message_2", "Resminiz Başarıyla Yüklenmiştir.");
+                map.put("user", users.get(0));
+            } else {
+                map.put("message", email + " email adresi size ait değildir.");
+            }
+        } else {
+
+            map.put("message", email + " email adresine ait kayıt bulunamamıştır..");
+        }
+        return "user/user-details";
+    }
 }

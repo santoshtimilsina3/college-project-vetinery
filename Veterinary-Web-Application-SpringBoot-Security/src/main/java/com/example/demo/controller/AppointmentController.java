@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-
 import com.example.demo.dto.request.AppointmentBookDto;
 import com.example.demo.model.Appointment;
 import com.example.demo.service.AppointmentService;
@@ -22,9 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @RequestMapping(ApiPaths.AppointmentCtrl.CTRL)
 public class AppointmentController {
 
-    @Autowired
-    AppointmentService appointmentService;
-
+    @Autowired AppointmentService appointmentService;
 
     @GetMapping(value = "{petId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -33,19 +30,20 @@ public class AppointmentController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Appointment bookAppointment(@RequestBody AppointmentBookDto appointmentBookDto,
-                                       @RequestParam Long petId) {
+    public @ResponseBody Appointment bookAppointment(
+            @RequestBody AppointmentBookDto appointmentBookDto, @RequestParam Long petId) {
         LocalDate appointmentDate = LocalDate.parse(appointmentBookDto.getAppointmentDate());
         LocalTime appointmentTime = LocalTime.parse(appointmentBookDto.getAppointmentTime());
 
-        Appointment newAppointment = appointmentService.bookAppointment(petId, appointmentDate, appointmentTime);
-        return newAppointment ;
-
+        Appointment newAppointment =
+                appointmentService.bookAppointment(petId, appointmentDate, appointmentTime);
+        return newAppointment;
     }
 
     @PostMapping(value = "changeStatus/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String changeAppointmentStatus(@RequestParam("newStatus") String status, @PathVariable Long id) {
+    public String changeAppointmentStatus(
+            @RequestParam("newStatus") String status, @PathVariable Long id) {
         return appointmentService.changeStatus(id, status);
     }
 }

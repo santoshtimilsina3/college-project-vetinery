@@ -19,25 +19,23 @@ import com.example.demo.repository.UserRepository;
 @RequestMapping("/secure/rest")
 public class AdminController {
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
+    @Autowired private BCryptPasswordEncoder passwordEncoder;
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
-	@PostMapping("/admin/add")
-	public String addUserByAdmin(@RequestBody User user) {
-		String pwd = user.getPassword();
-		String encryptPwd = passwordEncoder.encode(pwd);
-		user.setPassword(encryptPwd);
-		userRepository.save(user);
-		return "User added succesfully";
-	}
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PostMapping("/admin/add")
+    public String addUserByAdmin(@RequestBody User user) {
+        String pwd = user.getPassword();
+        String encryptPwd = passwordEncoder.encode(pwd);
+        user.setPassword(encryptPwd);
+        userRepository.save(user);
+        return "User added succesfully";
+    }
 
-//	@PreAuthorize("hasAnyRole('ADMIN')")
-//	@GetMapping("/admin/all")
-//	public String securedHello() {
-//		return "Secured Hello";
-//	}
+    //	@PreAuthorize("hasAnyRole('ADMIN')")
+    //	@GetMapping("/admin/all")
+    //	public String securedHello() {
+    //		return "Secured Hello";
+    //	}
 }

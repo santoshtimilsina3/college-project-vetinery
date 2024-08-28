@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Pet Details</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div th:replace="fragments/header :: header"></div>
+        <div class="col-md-8 offset-md-2">
+            <h1 th:text="${listing.pet.name}">Pet Name</h1>
+            <img th:src="${listing.pet.imageUrl}" class="img-fluid" alt="Pet Image"/>
+            <hr>
+            <p><strong>Type:</strong> <span th:text="${listing.pet.type}">Animal Type</span></p>
+            <p><strong>Age:</strong> <span th:text="${listing.pet.age}">Age</span></p>
+            <p><strong>Gender:</strong> <span th:text="${listing.pet.gender}">Gender</span></p>
+            <p th:text="${listing.description}">Description</p>
+            <hr>
+            <form th:action="@{/adoption/express-interest}" method="post">
+                <input type="hidden" th:value="${listing.listingId}" name="listingId"/>
+                <div class="form-group">
+                    <label for="message">Why do you want to adopt this pet?</label>
+                    <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Express Interest</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/header :: jsfile"></div>
+</body>
+</html>

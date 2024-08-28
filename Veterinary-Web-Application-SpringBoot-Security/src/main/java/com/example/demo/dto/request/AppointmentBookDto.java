@@ -16,5 +16,4 @@ public class AppointmentBookDto {
 
     private String appointmentDate;
     private String appointmentTime;
-
 }

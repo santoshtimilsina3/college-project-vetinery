@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Adopt a Pet</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div th:replace="fragments/header :: header"></div>
+        <div class="col-md-12">
+            <h1>Pets Available for Adoption</h1>
+            <hr>
+            <div class="row">
+                <div class="col-md-4" th:each="listing : ${listings}">
+                    <div class="card mb-4 shadow-sm">
+                        <img class="card-img-top" th:src="${listing.pet.imageUrl}" alt="Pet Image">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${listing.pet.name}">Pet Name</h5>
+                            <p class="card-text"><strong>Type:</strong> <span th:text="${listing.pet.type}">Animal Type</span></p>
+                            <p class="card-text"><strong>Age:</strong> <span th:text="${listing.pet.age}">Age</span></p>
+                            <p class="card-text"><strong>Gender:</strong> <span th:text="${listing.pet.gender}">Gender</span></p>
+                            <p class="card-text" th:text="${listing.description}">Description</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a th:href="@{/adoption/details/{id}(id=${listing.listingId})}" class="btn btn-sm btn-outline-primary">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/header :: jsfile"></div>
+</body>
+</html>

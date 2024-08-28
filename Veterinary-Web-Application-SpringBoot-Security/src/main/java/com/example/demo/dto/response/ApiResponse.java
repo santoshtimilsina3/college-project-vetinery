@@ -1,4 +1,5 @@
 package com.example.demo.dto.response;
+
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import org.springframework.http.HttpHeaders;
@@ -7,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Collections;
 import java.util.Map;
 
-@JsonPropertyOrder({ "httpHeaders", "httpStatusCode", "message", "data", "otherParams" })
+@JsonPropertyOrder({"httpHeaders", "httpStatusCode", "message", "data", "otherParams"})
 @Getter
 public class ApiResponse<T> {
 
@@ -33,7 +34,6 @@ public class ApiResponse<T> {
         private T data;
         private Map<String, Object> otherParams = Collections.emptyMap();
 
-
         public ApiResponseBuilder(int httpStatusCode, String message) {
             this.httpStatusCode = httpStatusCode;
             this.message = message;
@@ -56,7 +56,8 @@ public class ApiResponse<T> {
 
         public ResponseEntity<ApiResponse> build() {
             ApiResponse<T> apiResponse = new ApiResponse<>(this);
-            return ResponseEntity.status(apiResponse.getHttpStatusCode()).headers(apiResponse.getHttpHeaders())
+            return ResponseEntity.status(apiResponse.getHttpStatusCode())
+                    .headers(apiResponse.getHttpHeaders())
                     .body(apiResponse);
         }
     }

@@ -111,6 +111,8 @@
                     <select class="form-control adoption-status" th:attr="data-pet-id=${singlePet.getId()}">
                         <option value="AVAILABLE" th:selected="${singlePet.getAdoptionStatus()} == 'AVAILABLE'">AVAILABLE</option>
                         <option value="ADOPTED" th:selected="${singlePet.getAdoptionStatus()} == 'ADOPTED'">ADOPTED</option>
+                        <option value="PENDING" th:selected="${singlePet.adoptionStatus} == 'PENDING'">Pending</option>
+                        <option value="UNAVAILABLE" th:selected="${singlePet.adoptionStatus} == 'UNAVAILABLE'">Unavailable</option>
                     </select>
                 </td>
                 </tr>

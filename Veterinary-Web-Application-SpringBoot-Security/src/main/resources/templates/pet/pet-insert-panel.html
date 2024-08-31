@@ -97,23 +97,72 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
+<!--			<form autocomplete="off" action="#" th:action="@{'/pet/insert-pet/' + ${customer.getCustomerid()}}" th:object="${pet}" method="post">-->
+<!--				<hr>-->
+<!--				<label>Select Type</label>-->
+<!--				<select name="type" class="form-control" th:field="*{type}">-->
+<!--					<option th:each="type : ${types}"-->
+<!--							th:value="${type.name()}"-->
+<!--							th:text="${type.name()}"></option>-->
+<!--				</select>-->
+<!--				<br/>-->
+<!--				<label>Name</label>-->
+<!--				<input type="text" id="email" placeholder="Pet name" th:field="*{name}" class="form-control" required="required"/><br/>-->
+<!--				<label>Age</label>-->
+<!--				<input type="text" id="age" placeholder="Pet age" th:field="*{age}" class="form-control" required="required"/><br/>-->
+<!--				<label>Health Problem</label>-->
+<!--				<input type="text" id="password" placeholder="Health Problem" th:field="*{problem}" class="form-control" required="required"/><br/>-->
+<!--				<button type="submit" class="btn btn-primary text-center form-control">Add</button>-->
+<!--			</form>-->
+
 			<form autocomplete="off" action="#" th:action="@{'/pet/insert-pet/' + ${customer.getCustomerid()}}" th:object="${pet}" method="post">
 				<hr>
-				<label>Select Type</label>
+
+				<!-- Animal Type -->
+				<label>Select Animal Type</label>
 				<select name="type" class="form-control" th:field="*{type}">
 					<option th:each="type : ${types}"
 							th:value="${type.name()}"
 							th:text="${type.name()}"></option>
 				</select>
 				<br/>
+
+				<!-- Name -->
 				<label>Name</label>
-				<input type="text" id="email" placeholder="Pet name" th:field="*{name}" class="form-control" required="required"/><br/>
+				<input type="text" placeholder="Pet name" th:field="*{name}" class="form-control" required="required"/>
+				<br/>
+
+				<!-- Age -->
 				<label>Age</label>
-				<input type="text" id="age" placeholder="Pet age" th:field="*{age}" class="form-control" required="required"/><br/>
+				<input type="number" placeholder="Pet age" th:field="*{age}" class="form-control" required="required"/>
+				<br/>
+
+				<!-- Health Problem -->
 				<label>Health Problem</label>
-				<input type="text" id="password" placeholder="Health Problem" th:field="*{problem}" class="form-control" required="required"/><br/>
+				<input type="text" placeholder="Health Problem" th:field="*{problem}" class="form-control" required="required"/>
+				<br/>
+
+<!--				&lt;!&ndash; Adoption Status &ndash;&gt;-->
+<!--				<label>Adoption Status</label>-->
+<!--				<select name="adoptionStatus" class="form-control" th:field="*{adoptionStatus}">-->
+<!--					<option th:each="status : ${adoptionStatuses}"-->
+<!--							th:value="${status.name()}"-->
+<!--							th:text="${status.name()}"></option>-->
+<!--				</select>-->
+<!--				<br/>-->
+
+				<!-- Size -->
+				<label>Size</label>
+				<select name="size" class="form-control" th:field="*{size}">
+					<option th:each="size : ${sizes}"
+							th:value="${size.name()}"
+							th:text="${size.displayName}"></option>
+				</select>
+				<br/>
+
 				<button type="submit" class="btn btn-primary text-center form-control">Add</button>
 			</form>
+
 		</div>
 	</div>
 </div>

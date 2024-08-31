@@ -99,40 +99,54 @@ public class PetServiceImp implements PetService {
                         .collect(Collectors.toList());
 
         // If there's no search query, return the filtered results directly
-        if (query == null || query.isEmpty()) {
+        if (query == null || query.trim().isEmpty()) {
             return filteredPets;
         }
 
-        // Calculate TF-IDF scores
+        // Calculate TF-IDF scores for each pet
         Map<Pet, Double> petScores = new HashMap<>();
         String[] queryTerms = query.toLowerCase().split("\\s+");
 
         for (Pet pet : filteredPets) {
             String petData =
-                    (pet.getName() + " " + pet.getBreed() + " " + pet.getType()).toLowerCase();
+                    String.join(" ", pet.getName(), pet.getType().toString()).toLowerCase();
             double score = calculateTfIdfScore(petData, queryTerms, filteredPets);
             petScores.put(pet, score);
         }
 
-        // Sort pets by TF-IDF score
+        // Sort pets by TF-IDF score in descending order
         return petScores.entrySet().stream()
-                .sorted((e1, e2) -> Double.compare(e2.getValue(), e1.getValue()))
+                .sorted(Map.Entry.<Pet, Double>comparingByValue().reversed())
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
 
     private boolean matchesAge(Pet pet, String ageRange) {
-        // Implement the logic for filtering based on age range
-        return ageRange.equals("all")
-                || (ageRange.equals("puppy") && pet.getAge() < 1)
-                || (ageRange.equals("adult") && pet.getAge() >= 1 && pet.getAge() <= 7)
-                || (ageRange.equals("senior") && pet.getAge() > 7);
+        if (ageRange == null || ageRange.equals("all")) {
+            return true;
+        }
+        System.out.println("size "+ pet.getName());
+
+        switch (ageRange.toLowerCase()) {
+            case "puppy":
+                return pet.getAge() < 1;
+            case "adult":
+                return pet.getAge() >= 1 && pet.getAge() <= 7;
+            case "senior":
+                return pet.getAge() > 7;
+            default:
+                return false;
+        }
     }
 
+
     private boolean matchesSize(Pet pet, String size) {
-        // Implement the logic for filtering based on size
-        return size.equals("all") || pet.getSize().equalsIgnoreCase(size);
+        System.out.println("size "+ pet.getName());
+        boolean all = size == null || size.equals("all") || pet.getSize().toString().equalsIgnoreCase(size);
+        return all;
     }
+
+
 
     private double calculateTfIdfScore(String petData, String[] queryTerms, List<Pet> pets) {
         double score = 0.0;
@@ -147,22 +161,21 @@ public class PetServiceImp implements PetService {
     }
 
     private double calculateTermFrequency(String term, String text) {
-        // Calculate the frequency of the term in the text
         String[] words = text.split("\\s+");
-        long count = Arrays.stream(words).filter(word -> word.equals(term)).count();
+        long count = Arrays.stream(words).filter(word -> word.equalsIgnoreCase(term)).count();
         return (double) count / words.length;
     }
 
     private double calculateInverseDocumentFrequency(String term, List<Pet> pets) {
-        // Calculate how many pets contain the term
         long count =
                 pets.stream()
                         .filter(
                                 pet ->
-                                        (pet.getName() + " " + pet.getBreed() + " " + pet.getType())
+                                        (pet.getName() + " " + pet.getType().toString())
                                                 .toLowerCase()
                                                 .contains(term))
                         .count();
-        return Math.log((double) pets.size() / (1 + count));
+        // Avoid division by zero by adding 1 to count
+        return count == 0 ? 0.0 : Math.log((double) pets.size() / count);
     }
 }

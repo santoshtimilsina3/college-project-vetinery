@@ -9,28 +9,28 @@ import com.example.demo.service.Imp.CustomerServiceImp;
 import com.example.demo.service.Imp.PetServiceImp;
 import com.example.demo.util.AdoptionStatus;
 import com.example.demo.util.ApiPaths;
+import com.example.demo.util.Size;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.Valid;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping(ApiPaths.PetBasicCtrl.CTRL)
@@ -137,6 +137,7 @@ public class PetController {
             map.put("pet", new Pet());
             map.put("pets", pets);
             map.put("types", (Arrays.asList(Animals.values())));
+            map.put("sizes", (Arrays.asList(Size.values())));
 
             return "pet/pet-insert-panel";
         } else {
@@ -241,17 +242,7 @@ public class PetController {
             return "customer/customers";
         }
     }
-
-    //	@GetMapping("/search")
-    // @RequestMapping(value = "/search", method = RequestMethod.GET)
-    // public List<Pet> searchPets(
-    //			@RequestParam(required = false) String query,
-    //			@RequestParam(required = false, defaultValue = "all") String ageRange,
-    //			@RequestParam(required = false, defaultValue = "all") String size) {
-    //
-    //		// Call the petServiceImp to get search results
-    //		return petServiceImp.searchPets(query, ageRange, size);
-    //	}
+    
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String searchPets(
             @RequestParam(value = "query", required = false) String query,
@@ -263,6 +254,15 @@ public class PetController {
         List<Pet> pets = petServiceImp.searchPets(query, ageRange, size);
         model.addAttribute("pets", pets);
 
-        return "pet/pet-search"; // Return the name of the Thymeleaf template
+        return "pet/pet-search";
+    }
+
+    @RequestMapping(value = "pet/details/{id}", method = RequestMethod.GET)
+    public String viewPetDetails(@PathVariable Long id, Model model) {
+        Pet pet = petServiceImp.findById(id).get();
+
+        model.addAttribute("pet", pet);
+
+        return "pet/pet-details";
     }
 }

@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import com.example.demo.enums.Animals;
 import com.example.demo.util.AdoptionStatus;
+import com.example.demo.util.Size;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
@@ -33,13 +34,19 @@ public class Pet {
     private AdoptionStatus adoptionStatus;
 
     @Column(name = "size")
-    private String size;
+    @Enumerated(EnumType.STRING)
+    private Size size;
 
-    public String getSize() {
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customerid")
+    public Customer customer;
+
+    public Size getSize() {
         return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(Size size) {
         this.size = size;
     }
 
@@ -70,10 +77,7 @@ public class Pet {
         this.age = age;
     }
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customerid")
-    public Customer customer;
+
 
     public Pet() {
         super();

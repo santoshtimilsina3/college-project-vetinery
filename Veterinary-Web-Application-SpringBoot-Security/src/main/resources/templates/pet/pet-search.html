@@ -37,9 +37,10 @@
                         <label for="size">Size</label>
                         <select class="form-control" id="size" name="size">
                             <option value="all">All</option>
-                            <option value="small">Small</option>
-                            <option value="medium">Medium</option>
-                            <option value="large">Large</option>
+                            <option value="SMALL">SMALL</option>
+                            <option value="MEDIUM">MEDIUM</option>
+                            <option value="LARGE">LARGE</option>
+                            <option value="EXTRA_LARGE">EXTRA_LARGE</option>
                         </select>
                     </div>
                 </div>
@@ -53,7 +54,7 @@
             <div class="row">
                 <div class="col-md-4" th:each="pet : ${pets}">
                     <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" th:src="@{${pet.imageUrl}}" alt="Pet image">
+<!--                        <img class="card-img-top" th:src="@{${pet.imageUrl}}" alt="Pet image">-->
                         <div class="card-body">
                             <h5 class="card-title"><span class="badge badge-primary">Pet Information</span></h5>
                         </div>

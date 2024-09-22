@@ -10,19 +10,39 @@
 			<li class="nav-item active">
 				<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
 			</li>
+<!--			<li class="nav-item dropdown" th:if="${adminname}">-->
+<!--				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--					Customers-->
+<!--				</a>-->
+<!--				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" >-->
+<!--					<a class="dropdown-item" href="/customer/insert-customer">Add Customer</a>-->
+<!--					<a class="dropdown-item" href="/customer/customers">Customers</a>-->
+<!--				</div>-->
+<!--			</li>-->
+
 			<li class="nav-item dropdown" th:if="${adminname}">
+				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" th:if="${userRole == 'ROLE_SUPERADMIN'}">
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					Customers
 				</a>
-				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" >
+				<!-- Only show the dropdown-menu if the user is a SUPERADMIN -->
 					<a class="dropdown-item" href="/customer/insert-customer">Add Customer</a>
 					<a class="dropdown-item" href="/customer/customers">Customers</a>
 				</div>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" th:if="${userRole == 'ROLE_ADMIN'}">
+					<a class="nav-link dropdown-toggle" href="#" id="navbar_DropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						DASHBOARD
+					</a>
+					<a class="dropdown-item" href="/customer/show-customer/">DASHBOARD</a>
+				</div>
 			</li>
+
+
 			<li class="nav-item">
 				<a class="nav-link " href="/admin-panel">Admin Panel</a>
 			</li>
-			<li class="nav-item">
+
+			<li class="nav-item" th:if="${userRole == 'ROLE_SUPERADMIN'}">
 				<a class="nav-link " href="/stat-panel">Stats Panel</a>
 			</li>
 			<li class="nav-item" th:unless="${adminname}">

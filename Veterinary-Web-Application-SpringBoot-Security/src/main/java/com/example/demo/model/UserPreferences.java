@@ -18,7 +18,7 @@ import javax.persistence.Table;
 public class UserPreferences {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "preference_id")
     private Long preferenceId;
 

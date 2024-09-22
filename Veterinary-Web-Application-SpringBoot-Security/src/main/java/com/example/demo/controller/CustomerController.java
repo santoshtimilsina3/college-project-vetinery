@@ -3,19 +3,26 @@ package com.example.demo.controller;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
 import com.example.demo.dto.response.ApiResponse;
+import com.example.demo.model.Role;
+import com.example.demo.model.User;
+import com.example.demo.repository.RoleRepository;
+import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,6 +46,9 @@ public class CustomerController {
 
     @Autowired PetRepository petRepository;
     @Autowired CustomerServiceImp customerServiceImp;
+    @Autowired PasswordEncoder passwordEncoder;
+    @Autowired UserRepository userRepository;
+    @Autowired private RoleRepository roleRepository;
 
     @ResponseBody
     @GetMapping()
@@ -50,6 +60,7 @@ public class CustomerController {
     @RequestMapping(value = "/customers", method = RequestMethod.GET)
     public String getAllCustomers(Map<String, Object> map) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("userRole", auth.getAuthorities().stream().findFirst().get().getAuthority());
         List<Customer> customers = customerServiceImp.findAll();
         map.put("title", "Customers");
         map.put("adminname", auth.getName());
@@ -67,6 +78,8 @@ public class CustomerController {
         int currentPage = page.orElse(0);
         int pageSize = size.orElse(5);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("userRole", auth.getAuthorities().stream().findFirst().get().getAuthority());
+
         Page<Customer> customers =
                 customerServiceImp.GetAllPagination(PageRequest.of(currentPage - 1, pageSize));
         map.put("title", "Customers");
@@ -86,6 +99,10 @@ public class CustomerController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         map.put("title", "Customers");
         map.put("adminname", auth.getName());
+        map.put("userRole", auth.getAuthorities().stream().findFirst().get().getAuthority());
+
+        map.put("adminname", auth.getName());
+        map.put("userRole", auth.getAuthorities().stream().findFirst().get().getAuthority());
         List<Customer> customers = null;
         customers = customerServiceImp.findByFirstname(name);
 
@@ -112,6 +129,10 @@ public class CustomerController {
         map.put("title", "Customer Addition Section");
         map.put("adminname", auth.getName());
         map.put("customer", new Customer());
+        map.put("adminname", auth.getName());
+        map.put("userRole", auth.getAuthorities().stream().findFirst().get().getAuthority());
+
+        map.put("userRole", auth.getAuthorities().stream().findFirst().get().getAuthority());
         map.put("citys", new ArrayList<Citys>(Arrays.asList(Citys.values())));
         return "customer/customer-insert-panel";
     }
@@ -125,14 +146,29 @@ public class CustomerController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         map.put("adminname", auth.getName());
         map.put("customer", new Customer());
+        map.put("userRole", auth.getAuthorities().stream().findFirst().get().getAuthority());
+
         map.put("title", "Customer Addition Section");
         if (result.hasErrors()) {
             return "customer-insert-panel";
         } else {
             Boolean control = customerServiceImp.save(customer);
+
             if (control == false) {
                 map.put("message", "An Issue Occurred.");
             } else {
+                User newUser = new User();
+                newUser.setEmail(customer.getEmail());
+                newUser.setFirstname(customer.getFirstname());
+                newUser.setLastname(customer.getLastname());
+                newUser.setCity(customer.getCity());
+                newUser.setUsername("admin");
+                newUser.setPassword(passwordEncoder.encode("admin"));
+                newUser.setReel_password("admin");
+                Set<Role> roles = new HashSet<>();
+                roles.add(roleRepository.findByRole("ADMIN"));
+                newUser.setRoles(roles);
+                userRepository.save(newUser);
                 map.put("message", "Registration process successful");
             }
         }
@@ -146,6 +182,7 @@ public class CustomerController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         map.put("adminname", auth.getName());
+        map.put("userRole", auth.getAuthorities().stream().findFirst().get().getAuthority());
 
         Optional<Customer> customer = customerServiceImp.findById(customerid);
         if (customer.isPresent()) {
@@ -162,12 +199,37 @@ public class CustomerController {
         }
     }
 
+    @RequestMapping(value = "/show-customer", method = RequestMethod.GET)
+    public String getSpecificCustomer(Map<String, Object> map) throws SQLException {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("adminname", auth.getName());
+        map.put("userRole", auth.getAuthorities().stream().findFirst().get().getAuthority());
+
+        String email = auth.getName();
+
+        Optional<Customer> customer = customerServiceImp.findByEmail(email);
+        if (customer.isPresent()) {
+            map.put("title", "Customer Details");
+            map.put("customer", customer.get());
+
+            return "customer/show-customer";
+        } else {
+            List<Customer> customers = customerServiceImp.findAll();
+            map.put("title", "Customers");
+            map.put("customers", customers);
+            map.put("message", " No records found.");
+            return "admin-panel";
+        }
+    }
+
     @RequestMapping(value = "/update-customer/{customerid}", method = RequestMethod.GET)
     public String CustomerUpdatePanel(@PathVariable int customerid, Map<String, Object> map)
             throws SQLException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         map.put("adminname", auth.getName());
+        map.put("userRole", auth.getAuthorities().stream().findFirst().get().getAuthority());
 
         Optional<Customer> customer = customerServiceImp.findById(customerid);
         if (customer.isPresent()) {
@@ -192,6 +254,8 @@ public class CustomerController {
             throws SQLException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         map.put("adminname", auth.getName());
+        map.put("userRole", auth.getAuthorities().stream().findFirst().get().getAuthority());
+
         map.put("customer", new Customer());
         if (result.hasErrors()) {
             map.put("title", "Add Customer");
@@ -216,6 +280,8 @@ public class CustomerController {
             throws SQLException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("userRole", auth.getAuthorities().stream().findFirst().get().getAuthority());
+
         map.put("adminname", auth.getName());
         Optional<Customer> customer = customerServiceImp.findById(customerid);
         if (customer.isPresent()) {

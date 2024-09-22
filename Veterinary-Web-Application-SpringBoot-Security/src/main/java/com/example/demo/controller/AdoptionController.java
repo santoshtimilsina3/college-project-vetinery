@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.model.AdoptionListing;
 import com.example.demo.service.AdoptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +23,17 @@ public class AdoptionController {
     public String getAdoptionListings(Model model) {
         List<AdoptionListing> listings = adoptionService.getAvailableListings();
         model.addAttribute("listings", listings);
+
         return "adoption-list";
     }
 
     @GetMapping("/adoption/details/{id}")
     public String getAdoptionDetails(@PathVariable Long id, Model model) {
         AdoptionListing listing = adoptionService.getListingById(id);
-        model.addAttribute("listing", listing);
+        model.addAttribute("listing", listing); Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        model.addAttribute("adminname", auth.getName());
+        model.addAttribute("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
         return "adoption-details";
     }
 

@@ -63,8 +63,10 @@
         <div lang="en" th:replace="fragments/header :: title"></div>
         <div class="col-md-12"></div>
         <div class="col-md-4">
+            <div th:if="${userRole == 'ROLE_SUPERADMIN'}">
             <a class="btn btn-success" href="/customer/customers">View Customers</a>
             <a class="btn btn-info" href="/customer/insert-customer">Add Customer</a>
+            </div>
             <hr>
             <div class="card" style="width: 18rem;">
                 <div class="card-header">

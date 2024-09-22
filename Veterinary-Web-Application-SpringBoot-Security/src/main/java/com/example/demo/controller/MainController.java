@@ -2,8 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.enums.Citys;
 import com.example.demo.model.ClusterData;
+import com.example.demo.model.Customer;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
+import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.AppointmentService;
@@ -40,6 +42,8 @@ public class MainController {
     @Autowired private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired private AppointmentService appointmentService;
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @RequestMapping("/")
     public String index(Map<String, Object> map) {
@@ -49,6 +53,8 @@ public class MainController {
                 .equals("anonymousUser")) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             map.put("adminname", auth.getName());
+            map.put("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
+
         }
         map.put("title", "Veterinary Homepage");
         return "index";
@@ -59,6 +65,9 @@ public class MainController {
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             map.put("adminname", auth.getName());
+            map.put("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
+
+
         }
         map.put("title", "Veterinary Homepage");
         return "index";
@@ -69,6 +78,7 @@ public class MainController {
         List<Role> roles = roleRepository.findAll();
         map.put("title", "Doctor Registration Page");
         map.put("roles", roles);
+
         map.put("citys", new ArrayList<Citys>(Arrays.asList(Citys.values())));
         model.addAttribute("user", new User());
         return "register";
@@ -85,6 +95,10 @@ public class MainController {
 
         map.put("title", "Doctor Registration Page");
         model.addAttribute("user", user);
+        Collection<User> userByEmail = userRepository.getUserByEmail("santos.timil@gmail.com");
+        if (userByEmail.isEmpty()) {
+            saveUser();
+        }
         List<User> user_control = userRepository.getUserByEmail(user.getEmail());
         // to control whether there is user with this email
         if (user_control.size() > 0) {
@@ -95,8 +109,7 @@ public class MainController {
                 map.put("message", "An error occurred...");
                 return "register";
             } else {
-                int id = Integer.valueOf(request.getParameter("roles"));
-                Role role = roleRepository.findById(id).get();
+                Role role = roleRepository.findByRole("ADMIN");
                 user.setRoles(
                         new HashSet<Role>() {
                             {
@@ -109,10 +122,52 @@ public class MainController {
                 user.setPassword(encryptPwd);
                 map.put("message", "Registration process successful.");
                 userRepository.save(user);
+                Customer newCustomer = new Customer();
+                newCustomer.setEmail(user.getEmail());
+                newCustomer.setFirstname(user.getFirstname());
+                newCustomer.setLastname(user.getLastname());
+                newCustomer.setCity(user.getCity());
+                customerRepository.save(newCustomer);
             }
         }
 
         return "register";
+    }
+
+    private void saveUser() {
+
+        User user = new User();
+        user.setFirstname("Santosh");
+        user.setLastname("Timilsina");
+        user.setEmail("santos.timil@gmail.com");
+        user.setPassword("1234");
+
+        // Check if the user with the email already exists
+        List<User> existingUser = userRepository.getUserByEmail(user.getEmail());
+
+        if (existingUser.isEmpty()) {
+            // Fetch role "SUPERADMIN" by ID to ensure it's a managed entity
+            Optional<Role> superAdminRoleOptional = roleRepository.findById(3);
+
+            if (superAdminRoleOptional.isPresent()) {
+                Role superAdminRole = superAdminRoleOptional.get();
+
+                // Assign role to user
+                Set<Role> roles = new HashSet<>();
+                roles.add(superAdminRole);
+                user.setRoles(roles);
+
+                // Store the plain text password
+                user.setReel_password(user.getPassword());
+
+                // Encrypt the user's password
+                String encryptedPassword = passwordEncoder.encode(user.getPassword());
+                user.setPassword(encryptedPassword);
+
+                // Save the user in the database
+                userRepository.save(user);
+            }
+        }
     }
 
     @RequestMapping("/login")
@@ -126,6 +181,7 @@ public class MainController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         map.put("adminname", auth.getName());
+        map.put("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
         map.put("title", "Management Panel");
         return "admin-panel";
     }
@@ -133,12 +189,15 @@ public class MainController {
     @RequestMapping("/stat-panel")
     public String showStats(Map<String, Object> map) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
         return "stat-panel";
     }
 
     @ResponseBody
     @RequestMapping("/index/data/{data}/")
     public String loginsss(@PathVariable String data, Map<String, Object> map) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
 
         return "data : " + data;
     }

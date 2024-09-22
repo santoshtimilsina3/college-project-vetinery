@@ -6,6 +6,8 @@ import com.example.demo.service.AppointmentService;
 import com.example.demo.util.ApiPaths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +27,11 @@ public class AppointmentController {
 
     @GetMapping(value = "{petId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Appointment> getAppointments(@PathVariable Long petId) {
+    public List<Appointment> getAppointments(@PathVariable Long petId,Map<String, Object> map) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("adminname", auth.getName());
+        map.put("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
+
         return appointmentService.getAppointments(petId);
     }
 

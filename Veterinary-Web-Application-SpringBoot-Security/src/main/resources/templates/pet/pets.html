@@ -10,9 +10,10 @@
         .hidden {
             display: none;
         }
-         .custom-modal-dialog {
-             max-width: 800px; /* Adjust the width as needed */
-         }
+
+        .custom-modal-dialog {
+            max-width: 800px; /* Adjust the width as needed */
+        }
 
     </style>
 </head>
@@ -23,8 +24,10 @@
         <div lang="en" th:replace="fragments/header :: title"></div>
         <div class="col-md-12"></div>
         <div class="col-md-4">
-            <a class="btn btn-success" href="/customer/customers">View Customers</a>
-            <hr>
+            <div th:if="${userRole} == 'ROLE_SUPERADMIN'">
+                <a class="btn btn-success" href="/customer/customers">View Customers</a>
+                <hr>
+            </div>
             <div class="card" style="width: 18rem;">
                 <div class="card-header">
                     Featured
@@ -70,30 +73,33 @@
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
-                    <th scope="col">Id</th>
                     <th scope="col">Type</th>
                     <th scope="col">Name</th>
                     <th scope="col">Age</th>
                     <th scope="col">Health Problem</th>
                     <th scope="col">Adoptation Status</th>
                     <th scope="col">Actions</th>
-                    <th scope="col"> Change        Adoptation Status</th>
+                    <div th:if="${userRole== 'ROLE_ADMIN'}">
+                        <th scope="col"> Change Adoptation Status</th>
+                        <div>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="singlePet : ${pets}">
-                    <td th:text="${singlePet.getId()}"></td>
                     <td th:text="${singlePet.getType()}"></td>
                     <td th:text="${singlePet.getName()}"></td>
                     <td th:text="${singlePet.getAge()}"></td>
                     <td th:text="${singlePet.getProblem()}"></td>
-                    <td th:text="${singlePet.getAdoptionStatus()}"></td>
+                    <div th:if="${userRole== 'ROLE_ADMIN'}">
+                        <td th:text="${singlePet.getAdoptionStatus()}"></td>
+                    </div>
                     <td>
-                        <button class="btn btn-primary btn-sm book-appointment-btn" data-toggle="modal"
-                                data-target="#bookAppointmentModal"
-                                th:attr="data-pet-id=${singlePet.getId()}">Book Appointment
-                        </button>
-
+                        <div th:if="${userRole == 'ROLE_ADMIN'}">
+                            <button class="btn btn-primary btn-sm book-appointment-btn" data-toggle="modal"
+                                    data-target="#bookAppointmentModal"
+                                    th:attr="data-pet-id=${singlePet.getId()}">Book Appointment
+                            </button>
+                        </div>
                         <button class="btn btn-info btn-sm view-appointment-btn" data-toggle="modal"
                                 data-target="#viewAppointmentModal"
                                 th:attr="data-pet-id=${singlePet.getId()}">View Appointments
@@ -102,19 +108,28 @@
                         <!-- Dropdown for Adoption Status -->
 
                     </td>
-
+                    <td>
                         <a th:href="@{'/pet/delete-pet/' + ${singlePet.getId()}}" class="btn btn-warning btn-sm"
                            onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
 
                     </td>
-                <td>
-                    <select class="form-control adoption-status" th:attr="data-pet-id=${singlePet.getId()}">
-                        <option value="AVAILABLE" th:selected="${singlePet.getAdoptionStatus()} == 'AVAILABLE'">AVAILABLE</option>
-                        <option value="ADOPTED" th:selected="${singlePet.getAdoptionStatus()} == 'ADOPTED'">ADOPTED</option>
-                        <option value="PENDING" th:selected="${singlePet.adoptionStatus} == 'PENDING'">Pending</option>
-                        <option value="UNAVAILABLE" th:selected="${singlePet.adoptionStatus} == 'UNAVAILABLE'">Unavailable</option>
-                    </select>
-                </td>
+                    <td>
+                        <div th:if="${userRole== 'ROLE_ADMIN'}">
+                            <select class="form-control adoption-status" th:attr="data-pet-id=${singlePet.getId()}">
+                                <option value="AVAILABLE" th:selected="${singlePet.getAdoptionStatus()} == 'AVAILABLE'">
+                                    AVAILABLE
+                                </option>
+                                <option value="ADOPTED" th:selected="${singlePet.getAdoptionStatus()} == 'ADOPTED'">
+                                    ADOPTED
+                                </option>
+                                <option value="PENDING" th:selected="${singlePet.adoptionStatus} == 'PENDING'">Pending
+                                </option>
+                                <option value="UNAVAILABLE" th:selected="${singlePet.adoptionStatus} == 'UNAVAILABLE'">
+                                    Unavailable
+                                </option>
+                            </select>
+                        </div>
+                    </td>
                 </tr>
 
                 </tbody>
@@ -203,7 +218,7 @@
         })
             .then(response => response.text())
             .then(data => {
-        let modal = document.getElementById('bookAppointmentModal');
+                let modal = document.getElementById('bookAppointmentModal');
                 modal.style.display = "none";
                 // You can perform further actions or display messages as needed
                 alert("Booking SuccessFull !!!");
@@ -307,13 +322,15 @@
 
                         // Add event listener for status change
                         const statusDropdowns = document.querySelectorAll(".appointment-status");
-                        statusDropdowns.forEach(dropdown => {
-                            dropdown.addEventListener("change", event => {
-                                const newStatus = event.target.value;
-                                const appointmentId = event.target.getAttribute("data-appointment-id");
-                           updateStatus(appointmentId, newStatus);
+                        if (userRole == 'ROLE_SUPERADMIN') {
+                            statusDropdowns.forEach(dropdown => {
+                                dropdown.addEventListener("change", event => {
+                                    const newStatus = event.target.value;
+                                    const appointmentId = event.target.getAttribute("data-appointment-id");
+                                    updateStatus(appointmentId, newStatus);
+                                });
                             });
-                        });
+                        }
                     })
                     .catch(error => {
                         console.error("Error:", error);
@@ -355,11 +372,10 @@
 
     });
 
-        // Handle Adoption Status Change
+    // Handle Adoption Status Change
 
 
     // Handle Adoption Status Change
-
 
 
 </script>

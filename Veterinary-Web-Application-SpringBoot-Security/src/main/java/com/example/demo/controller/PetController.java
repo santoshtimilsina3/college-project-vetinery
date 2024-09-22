@@ -46,6 +46,8 @@ public class PetController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         map.put("adminname", auth.getName());
+        map.put("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
+
         Optional<Customer> customer = customerServiceImp.findById(customerid);
         if (customer.isPresent()) {
 
@@ -67,6 +69,11 @@ public class PetController {
     @RequestMapping(value = "/pet-search", method = RequestMethod.GET)
     public String showPetSearchPage(Model model) {
         // Add any initial data required for the page
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        model.addAttribute("adminname", auth.getName());
+        model.addAttribute("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
+
         model.addAttribute("pets", new ArrayList<>()); // Initialize with empty list
         return "pet/pet-search"; // Returns the pet-search.html view
     }
@@ -79,6 +86,8 @@ public class PetController {
             throws SQLException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        map.put("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
+
         map.put("adminname", auth.getName());
         List<Pet> pets = new ArrayList<>();
         Optional<Customer> customer = customerServiceImp.findById(customerid);
@@ -129,6 +138,8 @@ public class PetController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         map.put("adminname", auth.getName());
+        map.put("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
+
         Optional<Customer> customer = customerServiceImp.findById(customerid);
         if (customer.isPresent()) {
             List<Pet> pets = petServiceImp.findByCustomer(customer.get());
@@ -160,6 +171,8 @@ public class PetController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         map.put("adminname", auth.getName());
+        map.put("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
+
         if (!pet.getName().equals("") || !pet.getProblem().equals("")) {
             Optional<Customer> customer = customerServiceImp.findById(customerid);
             if (customer.isPresent()) {
@@ -215,6 +228,7 @@ public class PetController {
             throws SQLException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         map.put("adminname", auth.getName());
+        map.put("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
 
         Optional<Pet> selected_pet = petServiceImp.findById(pet_id);
         if (selected_pet.isPresent()) {
@@ -252,7 +266,10 @@ public class PetController {
             Model model) {
 
         List<Pet> pets = petServiceImp.searchPets(query, ageRange, size);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         model.addAttribute("pets", pets);
+        model.addAttribute("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
 
         return "pet/pet-search";
     }
@@ -260,6 +277,8 @@ public class PetController {
     @RequestMapping(value = "pet/details/{id}", method = RequestMethod.GET)
     public String viewPetDetails(@PathVariable Long id, Model model) {
         Pet pet = petServiceImp.findById(id).get();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        model.addAttribute("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
 
         model.addAttribute("pet", pet);
 

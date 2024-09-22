@@ -94,4 +94,8 @@ public class CustomerServiceImp implements CustomerService {
 		Page<Customer> allCustomers = customerRepository.findAll(pageable);
 		return responseBuilder.buildResponse(HttpStatus.OK.value(),"All Customers", allCustomers);
 	}
+
+    public Optional<Customer> findByEmail(String email) {
+		return customerRepository.findCustomerByEmail(email);
+    }
 }

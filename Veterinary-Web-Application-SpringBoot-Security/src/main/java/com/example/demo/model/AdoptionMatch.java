@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class AdoptionMatch {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "match_id")
     private Long matchId;
 

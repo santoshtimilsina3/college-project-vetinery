@@ -51,9 +51,25 @@
 		<div class="col-md-6">
 			<img alt=""  class="img-thumbnail " src="https://www.bukrek.com/images/veteriner-gunu.jpg">
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-6" th:if="${userRole=='ROLE_SUPERADMIN'}">
+
 			<a class="btn btn-success" href="/customer/customers">Customers</a>
 			<a class="btn btn-primary" href="/customer/insert-customer">Add Customer</a>
+
+			<hr>
+			<h1 class="h3 mb-3 font-weight-normal"><span class="badge badge-info">Who Are We?</span></h1>
+			<p>Our veterinary clinic in Kathmandu is open 7 DAYS / 24 HOURS,
+				committed to providing you and your pets with the highest quality service.
+			<hr>We aim to take the concept of veterinary medicine to the highest
+			standards day by day and to become a locomotive in the pet industry in
+			our country; Following innovations, and providing quality and accessible
+			services based on up-to-date information.</p>
+		</div>
+
+		<div class="col-md-6" th:if="${userRole=='ROLE_ADMIN'}">
+
+			<a class="btn btn-success" href="/customer/show-customer">DASHBOARD</a>
+
 			<hr>
 			<h1 class="h3 mb-3 font-weight-normal"><span class="badge badge-info">Who Are We?</span></h1>
 			<p>Our veterinary clinic in Kathmandu is open 7 DAYS / 24 HOURS,

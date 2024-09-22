@@ -18,7 +18,7 @@ import javax.persistence.Table;
 public class AdoptionListing {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "listing_id")
     private Long listingId;
 

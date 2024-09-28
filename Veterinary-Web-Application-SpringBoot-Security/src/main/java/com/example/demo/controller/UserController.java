@@ -53,16 +53,16 @@ public class UserController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         map.put("adminname", auth.getName());
-        map.put("title", "Doktor Detayları");
+        map.put("title", "Doctor Details");
         List<User> users = userRepository.getUserByEmail(email);
         if (users.size() > 0) {
             if (auth.getName().equals(users.get(0).getEmail())) {
                 map.put("user", users.get(0));
             } else {
-                map.put("message", email + " email adresi size ait değildir.");
+                map.put("message", email + " email address does not belong to you.");
             }
         } else {
-            map.put("message", email + " email adresine ait kayıt bulunamamıştır..");
+            map.put("message", "No records found for the email address: " + email + ".");
         }
         return "user/user-details";
     }
@@ -73,7 +73,7 @@ public class UserController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         map.put("adminname", auth.getName());
-        map.put("title", "ABC VET	");
+        map.put("title", "ABC VET");
 
         List<User> users = userRepository.getUserByEmail(email);
         if (users.size() > 0) {
@@ -82,11 +82,10 @@ public class UserController {
                 map.put("citys", new ArrayList<Citys>(Arrays.asList(Citys.values())));
                 return "user/user-update-panel";
             } else {
-                map.put("message", email + " email adresi size ait değildir.");
+                map.put("message", email + " email address does not belong to you.");
             }
         } else {
-
-            map.put("message", email + " email adresine ait kayıt bulunamamıştır..");
+            map.put("message", "No records found for the email address: " + email + ".");
         }
         return "user/user-details";
     }
@@ -97,27 +96,63 @@ public class UserController {
             throws SQLException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         map.put("adminname", auth.getName());
-        map.put("title", "Doktor Kayıt Güncelleme Sayfası");
+        map.put("title", "Doctor Record Update Page");
 
+        // Fetch the existing user from the database using the authenticated user's email.
         List<User> users = userRepository.getUserByEmail(auth.getName());
-        if (auth.getName().equals(users.get(0).getEmail())) {
+        if (users.size() > 0 && auth.getName().equals(users.get(0).getEmail())) {
 
             if (result.hasErrors()) {
-                map.put("message", "Kayıt işlmei başarısız..");
+                map.put("message", "Record update failed.");
                 return "user/user-details";
             }
-            user.setImage(users.get(0).getImage());
-            user.setReel_password(users.get(0).getReel_password());
-            user.setPassword(users.get(0).getPassword());
-            map.put("message", "Kayıt işlemi başarılı. Tekrar giriş yapınız.");
-            userRepository.save(user);
+
+            // Retrieve the existing user entity from the database.
+            User existingUser = users.get(0);
+
+            // Conditionally update only the fields that are provided (not null and not empty).
+            if (user.getUsername() != null && !user.getUsername().isEmpty()) {
+                existingUser.setUsername(user.getUsername());
+            }
+
+            if (user.getFirstname() != null && !user.getFirstname().isEmpty()) {
+                existingUser.setFirstname(user.getFirstname());
+            }
+
+            if (user.getLastname() != null && !user.getLastname().isEmpty()) {
+                existingUser.setLastname(user.getLastname());
+            }
+
+            if (user.getGender() != null && !user.getGender().isEmpty()) {
+                existingUser.setGender(user.getGender());
+            }
+
+            if (user.getCity() != null) {
+                existingUser.setCity(user.getCity());
+            }
+
+            if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+                existingUser.setEmail(user.getEmail());
+            }
+
+            // Retain the existing sensitive fields.
+            existingUser.setReel_password(existingUser.getReel_password());
+            existingUser.setPassword(existingUser.getPassword());
+
+            // Save the updated user to the repository.
+            userRepository.save(existingUser);
+
+            map.put("message", "Record update successful. Please log in again.");
             return "redirect:/logout";
         } else {
-            map.put("message", users.get(0).getEmail() + " email adresi size ait değildir.");
+            map.put("message", "The email address " + users.get(0).getEmail() + " does not belong to you.");
         }
 
         return "user/user-details";
     }
+
+
+
 
     @RequestMapping(value = "/update-user-password/{email}/", method = RequestMethod.GET)
     public String UserPasswordUpdatePanel(@PathVariable String email, Map<String, Object> map)
@@ -125,18 +160,18 @@ public class UserController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         map.put("adminname", auth.getName());
-        map.put("title", "Doktor Detayları");
+        map.put("title", "Doctor Details");
         List<User> users = userRepository.getUserByEmail(email);
         if (users.size() > 0) {
             if (auth.getName().equals(users.get(0).getEmail())) {
-                map.put("message", email + " Hoşgeldiniz.");
+                map.put("message", "Welcome, " + email + ".");
                 map.put("user", users.get(0));
                 return "user/user-password-update-panel";
             } else {
-                map.put("message", email + " email adresi size ait değildir.");
+                map.put("message", email + " email address does not belong to you.");
             }
         } else {
-            map.put("message", email + " email adresine ait kayıt bulunamamıştır..");
+            map.put("message", "No records found for the email address: " + email + ".");
         }
         return "user/user-details";
     }
@@ -148,7 +183,7 @@ public class UserController {
         List<User> users = userRepository.getUserByEmail(auth.getName());
         map.put("user", users.get(0));
         map.put("adminname", auth.getName());
-        map.put("title", "Doktor Detayları");
+        map.put("title", "Doctor Details");
         if (request.getParameter("oldpassword1").equals(request.getParameter("oldpassword2"))) {
             boolean control =
                     passwordEncoder.matches(
@@ -158,13 +193,13 @@ public class UserController {
                 users.get(0).setReel_password(request.getParameter("password"));
                 users.get(0).setPassword(passwordEncoder.encode(request.getParameter("password")));
                 userRepository.save(users.get(0));
-                map.put("message", " Şifreniz başarıyla güncellenmiştir..");
+                map.put("message", "Your password has been successfully updated.");
                 return "redirect:/logout";
             } else {
-                map.put("message", "Mevcut şifrenizi yanlış girdiniz.");
+                map.put("message", "Incorrect current password.");
             }
         } else {
-            map.put("message", "Mevcut şifreler uyuşmuyor.");
+            map.put("message", "The current passwords do not match.");
         }
         return "user/user-details";
     }
@@ -177,7 +212,7 @@ public class UserController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         map.put("adminname", auth.getName());
-        map.put("title", "Doktor Detayları");
+        map.put("title", "Doctor Details");
         List<User> users = userRepository.getUserByEmail(email);
         if (users.size() > 0) {
             if (auth.getName().equals(users.get(0).getEmail())) {
@@ -186,7 +221,6 @@ public class UserController {
                 for (MultipartFile file : files) {
                     Path fileNameAndPath = Paths.get(uploadDirectory, file.getOriginalFilename());
                     fileNames.append(file.getOriginalFilename() + " ");
-                    // fileNames.toString().replace(" ", "_");
                     users.get(0).setImage(fileNames.toString());
                     userRepository.save(users.get(0));
                     try {
@@ -195,16 +229,14 @@ public class UserController {
                         e.printStackTrace();
                     }
                 }
-                map.put("message", email + " Hoşgeldiniz.");
-                // map.put("message_2", "Successfully uploaded files "+fileNames.toString());
-                map.put("message_2", "Resminiz Başarıyla Yüklenmiştir.");
+                map.put("message", "Welcome, " + email + ".");
+                map.put("message_2", "Your image has been successfully uploaded.");
                 map.put("user", users.get(0));
             } else {
-                map.put("message", email + " email adresi size ait değildir.");
+                map.put("message", email + " email address does not belong to you.");
             }
         } else {
-
-            map.put("message", email + " email adresine ait kayıt bulunamamıştır..");
+            map.put("message", "No records found for the email address: " + email + ".");
         }
         return "user/user-details";
     }

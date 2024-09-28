@@ -274,13 +274,15 @@ public class PetController {
         return "pet/pet-search";
     }
 
-    @RequestMapping(value = "pet/details/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/details/{id}", method = RequestMethod.GET)
     public String viewPetDetails(@PathVariable Long id, Model model) {
         Pet pet = petServiceImp.findById(id).get();
+        Customer customer = pet.getCustomer();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("userRole",auth.getAuthorities().stream().findFirst().get().getAuthority());
 
         model.addAttribute("pet", pet);
+        model.addAttribute("customer", customer);
 
         return "pet/pet-details";
     }

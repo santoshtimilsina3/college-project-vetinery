@@ -16,7 +16,6 @@
         <!-- Pet Details Section -->
         <div class="col-md-4">
             <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="..." alt="Pet image cap" th:src="@{${pet.imageUrl}}" th:if="${pet.imageUrl != null}"/>
                 <div class="card-body">
                     <h5 class="card-title"><span class="badge badge-primary">Pet Information</span></h5>
                 </div>
@@ -42,7 +41,7 @@
                 <li class="list-group-item"><strong>City:</strong> <span th:text="${customer.getCity()}">New York</span></li>
                 <li class="list-group-item"><strong>Email:</strong> <span th:text="${customer.getEmail()}">johndoe@example.com</span></li>
             </ul>
-            <div class="card-body">
+            <div class="card-body" th:if="${userRole} == 'ROLE_SUPERADMIN'">
                 <a th:href="@{'/customer/show-customer/' + ${customer.getCustomerid()}}" class="btn btn-info btn-sm">View Customer Details</a>
             </div>
         </div>

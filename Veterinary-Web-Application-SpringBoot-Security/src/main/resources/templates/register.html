@@ -75,12 +75,13 @@
 <!--</body>-->
 <!--</html>-->
 
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
 	<title>Veterinary Application</title>
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
@@ -89,8 +90,7 @@
 		<div lang="en" th:replace="fragments/header :: title"></div>
 
 		<div class="col-md-6">
-			<img alt=""  class="img-thumbnail " src="https://www.bukrek.com/images/veteriner-gunu.jpg">
-
+			<img alt="" class="img-thumbnail" src="https://www.bukrek.com/images/veteriner-gunu.jpg">
 		</div>
 		<div class="col-md-6" style="border:2px solid #ddd">
 			<div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${message}">
@@ -100,54 +100,72 @@
 				</button>
 			</div>
 			<div th:unless="${message}">
-				<form autocomplete="off" action="#" th:action="@{/register}" th:object="${user}" method="post">
+				<form autocomplete="off" action="#" th:action="@{/register}" th:object="${user}" method="post" onsubmit="return validateForm()">
 					<label>Username</label>
-					<input type="text" id="firstName" placeholder="First Name" th:field="*{username}" class="form-control" required="required"/><br/>
+					<input type="text" id="username" placeholder="Username" th:field="*{username}" class="form-control"
+						   required pattern="^[A-Za-z0-9]{3,20}$" title="Username should be alphanumeric and between 3 and 20 characters."/><br/>
+
 					<label>First Name</label>
-					<input type="text" id="firstName" placeholder="First Name" th:field="*{firstname}" class="form-control" required="required"/><br/>
+					<input type="text" id="firstName" placeholder="First Name" th:field="*{firstname}" class="form-control"
+						   required pattern="^[A-Za-z]{2,30}$" title="First name should be alphabetic and between 2 and 30 characters."/><br/>
+
 					<label>Last Name</label>
-					<input type="text" id="lastname" placeholder="Last Name" th:field="*{lastname}" class="form-control" required="required"/><br/>
+					<input type="text" id="lastname" placeholder="Last Name" th:field="*{lastname}" class="form-control"
+						   required pattern="^[A-Za-z]{2,30}$" title="Last name should be alphabetic and between 2 and 30 characters."/><br/>
 
 					<label>Gender</label>
 					<ul>
 						<li>
-							<input type="radio"  th:field="*{gender}" th:value="'male	'" />
-							<label  th:text="'Male'"></label>
-							<input type="radio"  th:field="*{gender}" th:value="'female'" />
+							<input type="radio" id="male" name="gender" th:field="*{gender}" th:value="'male'" required />
+							<label th:text="'Male'"></label>
+							<input type="radio" id="female" name="gender" th:field="*{gender}" th:value="'female'" required />
 							<label th:text="'Female'"></label>
 						</li>
 					</ul>
-					<label>Select Role</label>
-<!--					<select name="roles" class="form-control">-->
-<!--						<option th:each="role : ${roles}"-->
-<!--								th:value="${role.getRole_id()}"-->
-<!--								th:text="${role.getRole()}"></option>-->
-<!--					</select><br/>-->
+					<br/>
+
 					<label>Select City</label>
-					<select name="city" class="form-control">
-						<option th:each="city : ${citys}"
-								th:value="${city.name()}"
-								th:text="${city.name()}"></option>
+					<select name="city" class="form-control" th:field="*{city}" required>
+						<option value="" selected disabled>Select your city</option>
+						<option th:each="city : ${citys}" th:value="${city.name()}" th:text="${city.name()}"></option>
 					</select>
 					<br/>
+
 					<label>Email</label>
-					<input type="text" id="email" placeholder=" Email" th:field="*{email}" class="form-control" required="required"/><br/>
+					<input type="email" id="email" placeholder="Email" th:field="*{email}" class="form-control"
+						   required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" title="Please enter a valid email address."/><br/>
+
 					<label>Password</label>
-					<input type="text" id="password" placeholder=" Password" th:field="*{password}" class="form-control" required="required"/><br/>
+					<input type="password" id="password" placeholder="Password" th:field="*{password}" class="form-control"
+						   required pattern=".{6,20}" title="Password must be between 6 and 20 characters long."/><br/>
+
 					<button type="submit" class="btn btn-primary text-center form-control">Save</button>
 				</form>
 			</div>
-
-			<div class="margin-top20 text-center"><a th:href="@{/login}">Go to Login Page</a></div>
-			<hr>
-			<hr>
+			<div class="margin-top20 text-center">
+				<a th:href="@{/login}">Go to Login Page</a>
+			</div>
 		</div>
-
 	</div>
 </div>
 
 <div lang="en" th:replace="fragments/header :: jsfile"></div>
 
+<script>
+	function validateForm() {
+		// Custom validation logic if needed for further processing
+		const username = document.getElementById("username").value;
+		const password = document.getElementById("password").value;
+
+		// Example: Additional checks for password strength
+		if (password.length < 6 || password.length > 20) {
+			alert("Password must be between 6 and 20 characters.");
+			return false;
+		}
+
+		return true;
+	}
+</script>
 
 </body>
 </html>

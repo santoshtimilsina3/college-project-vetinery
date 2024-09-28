@@ -38,8 +38,11 @@
 			</li>
 
 
-			<li class="nav-item">
+			<li class="nav-item" th:if="${userRole== 'ROLE_SUPERADMIN'}">
 				<a class="nav-link " href="/admin-panel">Admin Panel</a>
+			</li>
+			<li class="nav-item" th:if="${userRole== 'ROLE_ADMIN'}">
+				<a class="nav-link " href="/admin-panel">Customer Panel</a>
 			</li>
 
 			<li class="nav-item" th:if="${userRole == 'ROLE_SUPERADMIN'}">

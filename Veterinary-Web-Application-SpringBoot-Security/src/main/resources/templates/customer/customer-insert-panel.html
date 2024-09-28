@@ -1,54 +1,3 @@
-<!--<html xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <title>Veteriner Uygulaması</title>-->
-<!--    <meta charset="utf-8"/>-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1"/>-->
-<!--	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
-<!--</head>-->
-<!--<body>-->
-<!--<div class="container">-->
-<!--	<div class="row">-->
-<!--		<div lang="tr" th:replace="fragments/header :: header"></div> -->
-<!--		<div lang="tr" th:replace="fragments/header :: title"></div>-->
-
-<!--		<div class="col-md-6">-->
-<!--			<img alt=""  class="img-thumbnail " src="https://www.bukrek.com/images/veteriner-gunu.jpg">-->
-<!--		</div>		-->
-<!--		<div class="col-md-6" style="border:3px solid #ddd">-->
-<!--			<h1 class="h3 mb-3 font-weight-normal">Müşteri Kayıt Bölümü</h1>-->
-<!--		    <hr>	-->
-<!--			<div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${message}">-->
-<!--				<strong th:text="${message}"></strong> -->
-<!--				<button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
-<!--				<span aria-hidden="true">&times;</span>-->
-<!--				</button>-->
-<!--			</div>-->
-<!--		    <form autocomplete="off" action="#" th:action="@{/customer/insert-customer}" th:object="${customer}" method="post">-->
-<!--		        <label>Müşteri Adı </label>-->
-<!--		        <input type="text" id="firstName" placeholder="First Name" th:field="*{firstname}" class="form-control" required="required"/><br/>-->
-<!--		        <label>Müşteri Soyadı </label>-->
-<!--		        <input type="text" id="lastname" placeholder="First Name" th:field="*{lastname}" class="form-control" required="required"/><br/>-->
-<!--		        <label>Telefon Numarası</label>-->
-<!--		        <input type="text" id="phone_number" placeholder="Telefon Numarası" th:field="*{phone_number}" class="form-control" required="required"/><br/>-->
-<!--				<label>Şehir Seçiniz.</label>-->
-<!--				<select name="city" class="form-control" th:field="*{city}">-->
-<!--				  <option th:each="city : ${citys}" -->
-<!--				          th:value="${city.name()}" -->
-<!--				          th:text="${city.name()}"></option>-->
-<!--				</select>-->
-<!--				<br/><label>Email</label>-->
-<!--		        <input type="email" id="email" placeholder=" Email" th:field="*{email}" class="form-control" required="required"/><br/>-->
-<!--		        <button type="submit" class="btn btn-primary text-center form-control">Kaydet</button>-->
-<!--		    </form>-->
-<!--    		<div class="margin-top20 text-center"><a th:href="@{/customer/customers}">Müşterileri Gör</a></div>-->
-<!--		</div>-->
-<!--	</div>-->
-<!--</div>-->
-
-<!--	<div lang="tr" th:replace="fragments/header :: jsfile"></div>-->
-<!--	</body>-->
-<!--</html>-->
-
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<title>Veterinary Application</title>
@@ -63,7 +12,7 @@
 		<div lang="en" th:replace="fragments/header :: title"></div>
 
 		<div class="col-md-6">
-			<img alt=""  class="img-thumbnail " src="https://www.bukrek.com/images/veteriner-gunu.jpg">
+			<img alt="" class="img-thumbnail" src="https://www.bukrek.com/images/veteriner-gunu.jpg">
 		</div>
 		<div class="col-md-6" style="border:3px solid #ddd">
 			<h1 class="h3 mb-3 font-weight-normal">Customer Registration Section</h1>
@@ -74,29 +23,66 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<form autocomplete="off" action="#" th:action="@{/customer/insert-customer}" th:object="${customer}" method="post">
+			<form autocomplete="off" action="#" th:action="@{/customer/insert-customer}" th:object="${customer}" method="post" onsubmit="return validateForm()">
 				<label>Customer First Name</label>
-				<input type="text" id="firstName" placeholder="First Name" th:field="*{firstname}" class="form-control" required="required"/><br/>
+				<input type="text" id="firstName" placeholder="First Name" th:field="*{firstname}" class="form-control"
+					   required="required" pattern="^[A-Za-z]{2,30}$" title="Name should be between 2 and 30 alphabetic characters." /><br/>
+
 				<label>Customer Last Name</label>
-				<input type="text" id="lastname" placeholder="First Name" th:field="*{lastname}" class="form-control" required="required"/><br/>
+				<input type="text" id="lastname" placeholder="Last Name" th:field="*{lastname}" class="form-control"
+					   required="required" pattern="^[A-Za-z]{2,30}$" title="Last Name should be between 2 and 30 alphabetic characters."/><br/>
+
 				<label>Phone Number</label>
-				<input type="text" id="phone_number" placeholder="Phone Number" th:field="*{phone_number}" class="form-control" required="required"/><br/>
+				<input type="tel" id="phone_number" placeholder="Phone Number" th:field="*{phone_number}" class="form-control"
+					   required="required" pattern="^[0-9]{10}$" title="Phone number must be a 10-digit number."/><br/>
+
 				<label>Select City</label>
-				<select name="city" class="form-control" th:field="*{city}">
-					<option th:each="city : ${citys}"
-							th:value="${city.name()}"
-							th:text="${city.name()}"></option>
+				<select name="city" class="form-control" th:field="*{city}" required>
+					<option th:each="city : ${citys}" th:value="${city.name()}" th:text="${city.name()}"></option>
 				</select>
 				<br/>
+
 				<label>Email</label>
-				<input type="email" id="email" placeholder=" Email" th:field="*{email}" class="form-control" required="required"/><br/>
+				<input type="email" id="email" placeholder="Email" th:field="*{email}" class="form-control"
+					   required="required" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" title="Please enter a valid email address."/><br/>
+
 				<button type="submit" class="btn btn-primary text-center form-control">Save</button>
 			</form>
-			<div class="margin-top20 text-center"><a th:href="@{/customer/customers}">View Customers</a></div>
+			<div class="margin-top20 text-center">
+				<a th:href="@{/customer/customers}">View Customers</a>
+			</div>
 		</div>
 	</div>
 </div>
 
 <div lang="en" th:replace="fragments/header :: jsfile"></div>
+
+<script>
+	function validateForm() {
+		let firstName = document.getElementById("firstName").value;
+		let lastName = document.getElementById("lastname").value;
+		let phoneNumber = document.getElementById("phone_number").value;
+		let email = document.getElementById("email").value;
+
+		if (!/^[A-Za-z]{2,30}$/.test(firstName)) {
+			alert("First Name should be between 2 and 30 alphabetic characters.");
+			return false;
+		}
+		if (!/^[A-Za-z]{2,30}$/.test(lastName)) {
+			alert("Last Name should be between 2 and 30 alphabetic characters.");
+			return false;
+		}
+		if (!/^[0-9]{10}$/.test(phoneNumber)) {
+			alert("Phone number must be a 10-digit number.");
+			return false;
+		}
+		if (!/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(email)) {
+			alert("Please enter a valid email address.");
+			return false;
+		}
+		return true;
+	}
+</script>
+
 </body>
 </html>

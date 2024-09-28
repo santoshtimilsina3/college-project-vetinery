@@ -140,8 +140,8 @@
 </div>
 
 
-<div class="modal fade" id="bookAppointmentModal" tabindex="-1" role="dialog"
-     aria-labelledby="bookAppointmentModalLabel" aria-hidden="true">
+<!-- Book Appointment Modal -->
+<div class="modal fade" id="bookAppointmentModal" tabindex="-1" role="dialog" aria-labelledby="bookAppointmentModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -158,9 +158,14 @@
                         <label for="appointmentDate">Appointment Date</label>
                         <input type="date" class="form-control" id="appointmentDate" name="appointmentDate" required>
                     </div>
+
+                    <!-- Update appointment time to dropdown with predefined slots -->
                     <div class="form-group">
                         <label for="appointmentTime">Appointment Time</label>
-                        <input type="time" class="form-control" id="appointmentTime" name="appointmentTime" required>
+                        <select class="form-control" id="appointmentTime" name="appointmentTime" required>
+                            <option value="">Select a time slot</option>
+                            <!-- Time slots will be dynamically added here by JavaScript -->
+                        </select>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Book</button>
@@ -172,6 +177,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Modal for Viewing Appointments -->
 <div class="modal fade" id="viewAppointmentModal" tabindex="-1" role="dialog"
@@ -199,6 +205,42 @@
 </body>
 
 <script>
+    $(document).ready(function () {
+        let today = new Date();
+
+        today.setDate(today.getDate()+1);
+
+        today = today.toISOString().split('T')[0];
+        document.getElementById("appointmentDate").setAttribute("min", today);
+
+        // Rest of the existing code...
+    });
+
+    $(document).ready(function () {
+        // Set the minimum appointment date to the next day.
+        let today = new Date();
+        today.setDate(today.getDate() + 1);
+        today = today.toISOString().split('T')[0];
+        document.getElementById("appointmentDate").setAttribute("min", today);
+
+        // Generate half-hour time slots between 9:00 AM and 5:00 PM.
+        let startHour = 9;  // Start at 9:00 AM
+        let endHour = 17;   // End at 5:00 PM (17:00 in 24-hour format)
+        let timeSelect = document.getElementById("appointmentTime");
+
+        for (let hour = startHour; hour < endHour; hour++) {
+            let halfHourSlots = ["00", "30"];  // Half-hour intervals
+            halfHourSlots.forEach(minute => {
+                let timeSlot = `${hour.toString().padStart(2, '0')}:${minute}`;
+                let timeDisplay = `${hour % 12 === 0 ? 12 : hour % 12}:${minute} ${hour < 12 ? 'AM' : 'PM'}`;
+                let option = document.createElement("option");
+                option.value = timeSlot;
+                option.textContent = timeDisplay;
+                timeSelect.appendChild(option);
+            });
+        }
+    });
+
     function submitForm(event) {
         event.preventDefault();
         let petId = document.getElementById("petId").value;
@@ -322,7 +364,6 @@
 
                         // Add event listener for status change
                         const statusDropdowns = document.querySelectorAll(".appointment-status");
-                        if (userRole == 'ROLE_SUPERADMIN') {
                             statusDropdowns.forEach(dropdown => {
                                 dropdown.addEventListener("change", event => {
                                     const newStatus = event.target.value;
@@ -330,7 +371,7 @@
                                     updateStatus(appointmentId, newStatus);
                                 });
                             });
-                        }
+
                     })
                     .catch(error => {
                         console.error("Error:", error);
@@ -376,6 +417,8 @@
 
 
     // Handle Adoption Status Change
+
+        // Set the minimum date for the appointmentDate input to today's date
 
 
 </script>
